@@ -67,13 +67,9 @@ if (actualRoute.pathJS != "") {                             // Vérification si 
 
 // Changement du titre de la page
 document.title = actualRoute.title + " - " + websiteName;
-showAndHideElementsForRoles();  // Fonction pour afficher ou masquer les éléments en fonction du rôle de l'utilisateur
-};
-
-
-
 // Afficher ou masquer les éléments en fonction du rôle
 showAndHideElementsForRoles();  // Fonction pour afficher ou masquer les éléments en fonction du rôle de l'utilisateur
+};
 
 
 // Fonction pour gérer les événements de routage (clic sur les liens)
