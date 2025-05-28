@@ -1,0 +1,103 @@
+@import url("/node_modules/bootstrap-icons/font/bootstrap-icons.css"); // Import Bootstrap Icons
+@import 'custom'; // Import custom styles
+
+html{
+    position: relative;
+    min-height: 100%;
+}
+
+main{
+    margin-bottom: 270px;
+}
+
+footer.footer{
+    padding: 15px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+p{
+    font-family: $font-family-serif; /*--change la police en serif--*/
+    /*font-size: 18px; /*--sinon taille de 18px--*/
+}
+
+.hero-scene{  
+    position: relative; /*--positionner la scène--*/
+    margin-bottom: 15px; /*--marge en bas de la scène--*/
+    &::before{ 
+        content:"";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url(../images/fondheroscene.jpg); /*--image de fond--*/
+        background-size: cover; /*--image de fond--*/
+        filter: brightness(0.3); /*--luminausité de l'image de fond--*/
+        }
+        *{
+            position: relative; /*Positionner tout les éléments devant le ::before*/
+        }
+        .hero-scene-content{ /*--container de la scène--*/
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    
+}
+
+.text-justify{
+    text-align: justify; /*--justifier le texte--*/
+}
+
+.image-card{
+    position: relative;
+    &:hover{
+        .titre-image,
+        .action-image-buttons{
+            opacity: 1;
+        }
+        img{
+            filter: brightness(0.3); /*--luminausité de l'image--*/
+        }
+    }
+
+    img{
+        transition: all 0.3s;
+    }
+
+    .titre-image{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: all 0.3s;
+    }
+    .action-image-buttons{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 5px;
+        display: flex;
+        justify-content: space-between;
+        opacity: 0;
+        transition: all 0.3s;
+    }
+}
+
+.form-label{
+    color: $primary;
+}
+
+.allreservations{
+    a{
+        display: block;
+        color: $black;
+        padding: 10px;
+    }
+}
