@@ -2,8 +2,20 @@ import Route from "./route.js";
 //Définir ici vos routes
 export const allRoutes = [
   new Route("/", "Accueil", "/pages/home.html", []),
-  new Route("/galerie", "La galerie", "/pages/galerie.html", []),
-  new Route("/carte", "La carte", "/pages/carte.html", []),
+  new Route(
+    "/galerie",
+    "La galerie",
+    "/pages/galerie.html",
+    [],
+    "/js/galerie-admin.js"
+  ),
+  new Route(
+    "/carte",
+    "La carte",
+    "/pages/carte.html",
+    [],
+    "/js/carte-admin.js"
+  ),
   new Route(
     "/signin",
     "Connexion",
@@ -32,11 +44,22 @@ export const allRoutes = [
     "/allResa",
     "Vos réservations",
     "/pages/reservations/allResa.html",
-    ["client", "admin"]
+    ["client", "admin"],
+    "/js/reservations-manager.js"
   ),
-  new Route("/reserver", "Réserver", "/pages/reservations/reserver.html", [
-    "client",
-  ]),
+  new Route(
+    "/reserver",
+    "Réserver",
+    "/pages/reservations/reserver.html",
+    ["client", "admin"],
+    "/js/reservation-form.js"
+  ),
+  new Route(
+    "/mentions-legales",
+    "Mentions légales",
+    "/pages/mentions-legales.html",
+    []
+  ),
 ];
 //Le titre s'affiche comme ceci : Route.titre - websitename
 export const websiteName = "Quai Antique";

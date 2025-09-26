@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guide de Test - Système de Réservations</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .user-card {
+        transition: transform 0.2s;
+      }
+      .user-card:hover {
+        transform: translateY(-5px);
+      }
+      .code-block {
+        background-color: #f8f9fa;
+        border-left: 4px solid #007bff;
+        padding: 15px;
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <h1 class="text-center mb-5">
+            🧪 Guide de Test - Système de Réservations
+          </h1>
+
+          <div class="alert alert-info">
+            <h5>📋 Fonctionnalité implémentée</h5>
+            <p><strong>Filtrage des réservations par utilisateur :</strong></p>
+            <ul>
+              <li>
+                Les <strong>clients</strong> ne voient que leurs propres
+                réservations
+              </li>
+              <li>
+                L'<strong>administrateur</strong> voit toutes les réservations
+                de tous les clients
+              </li>
+              <li>
+                Redirection automatique vers la connexion pour les visiteurs non
+                connectés
+              </li>
+            </ul>
+          </div>
+
+          <h2>👥 Comptes de Test Disponibles</h2>
+          <p>
+            Voici les différents comptes que vous pouvez utiliser pour tester le
+            système :
+          </p>
+
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="card user-card h-100 border-success">
+                <div class="card-header bg-success text-white">
+                  <h5 class="mb-0">🔧 Administrateur</h5>
+                </div>
+                <div class="card-body">
+                  <div class="code-block">
+                    <strong>Email:</strong> admin@email.com<br />
+                    <strong>Mot de passe:</strong> admin
+                  </div>
+                  <h6>Privilèges:</h6>
+                  <ul>
+                    <li>✅ Voir <strong>toutes</strong> les réservations</li>
+                    <li>✅ Modifier le statut des réservations</li>
+                    <li>✅ Supprimer des réservations</li>
+                    <li>✅ Exporter les données</li>
+                    <li>✅ Gestion complète galerie/carte</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <div class="card user-card h-100 border-primary">
+                <div class="card-header bg-primary text-white">
+                  <h5 class="mb-0">👤 Client Principal</h5>
+                </div>
+                <div class="card-body">
+                  <div class="code-block">
+                    <strong>Email:</strong> test@email.com<br />
+                    <strong>Mot de passe:</strong> 123
+                  </div>
+                  <h6>Réservations visibles:</h6>
+                  <ul>
+                    <li>📅 15 Oct 2025 - 19:30 (4 personnes)</li>
+                    <li>📅 20 Oct 2025 - 12:00 (2 personnes)</li>
+                  </ul>
+                  <p class="text-muted small">
+                    Ne voit que ses propres réservations
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <div class="card user-card h-100 border-info">
+                <div class="card-header bg-info text-white">
+                  <h5 class="mb-0">👤 Client Marie</h5>
+                </div>
+                <div class="card-body">
+                  <div class="code-block">
+                    <strong>Email:</strong> client2@email.com<br />
+                    <strong>Mot de passe:</strong> marie
+                  </div>
+                  <h6>Réservations visibles:</h6>
+                  <ul>
+                    <li>📅 18 Oct 2025 - 20:00 (6 personnes)</li>
+                  </ul>
+                  <p class="text-muted small">
+                    Ne voit que sa propre réservation
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <div class="card user-card h-100 border-warning">
+                <div class="card-header bg-warning text-dark">
+                  <h5 class="mb-0">👤 Client Pierre</h5>
+                </div>
+                <div class="card-body">
+                  <div class="code-block">
+                    <strong>Email:</strong> client3@email.com<br />
+                    <strong>Mot de passe:</strong> pierre
+                  </div>
+                  <h6>Réservations visibles:</h6>
+                  <ul>
+                    <li>📅 12 Oct 2025 - 12:30 (5 personnes)</li>
+                  </ul>
+                  <p class="text-muted small">
+                    Ne voit que sa propre réservation
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2>🧪 Procédure de Test</h2>
+          <div class="accordion" id="testAccordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#test1"
+                >
+                  1. Test du filtrage client
+                </button>
+              </h2>
+              <div
+                id="test1"
+                class="accordion-collapse collapse show"
+                data-bs-parent="#testAccordion"
+              >
+                <div class="accordion-body">
+                  <ol>
+                    <li>
+                      Connectez-vous avec <code>test@email.com</code> /
+                      <code>123</code>
+                    </li>
+                    <li>Allez sur "Les réservations"</li>
+                    <li>
+                      Vérifiez que vous ne voyez que
+                      <strong>2 réservations</strong> (les siennes)
+                    </li>
+                    <li>Déconnectez-vous</li>
+                    <li>
+                      Connectez-vous avec <code>client2@email.com</code> /
+                      <code>marie</code>
+                    </li>
+                    <li>
+                      Vérifiez que vous ne voyez que
+                      <strong>1 réservation</strong> (la sienne)
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#test2"
+                >
+                  2. Test des privilèges administrateur
+                </button>
+              </h2>
+              <div
+                id="test2"
+                class="accordion-collapse collapse"
+                data-bs-parent="#testAccordion"
+              >
+                <div class="accordion-body">
+                  <ol>
+                    <li>
+                      Connectez-vous avec <code>admin@email.com</code> /
+                      <code>admin</code>
+                    </li>
+                    <li>Allez sur "Les réservations"</li>
+                    <li>
+                      Vérifiez que vous voyez
+                      <strong>toutes les réservations</strong> (5 au total)
+                    </li>
+                    <li>
+                      Vérifiez la présence des boutons "Modifier" et "Supprimer"
+                    </li>
+                    <li>Testez la modification du statut d'une réservation</li>
+                    <li>Vérifiez la présence du bouton "Exporter"</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#test3"
+                >
+                  3. Test de la redirection non connecté
+                </button>
+              </h2>
+              <div
+                id="test3"
+                class="accordion-collapse collapse"
+                data-bs-parent="#testAccordion"
+              >
+                <div class="accordion-body">
+                  <ol>
+                    <li>Déconnectez-vous complètement</li>
+                    <li>
+                      Essayez d'accéder directement à une page de réservation
+                    </li>
+                    <li>
+                      Vérifiez la redirection automatique vers la page de
+                      connexion
+                    </li>
+                    <li>Vérifiez l'affichage du message informatif</li>
+                    <li>
+                      Connectez-vous et vérifiez la redirection vers la page
+                      demandée
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-success mt-4">
+            <h5>✅ Résultat Attendu</h5>
+            <p>
+              Chaque utilisateur ne doit voir que ses propres réservations, sauf
+              l'administrateur qui doit voir toutes les réservations avec des
+              outils de gestion supplémentaires.
+            </p>
+          </div>
+
+          <div class="text-center mt-5">
+            <a href="index.html" class="btn btn-primary btn-lg">
+              🏠 Retour à l'application
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

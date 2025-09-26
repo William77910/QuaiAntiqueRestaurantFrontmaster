@@ -7,26 +7,21 @@
 <div class="container text-center pb-3">
   <!--container pour le bouton-->
   <a href="/reserver" class="btn btn-primary" onclick="route()"
-    >Réserver une table</a
+    >➕ Réserver une table</a
   >
 </div>
-<div class="container text-center allreservations">
-  <a href="#">
-    <span>12/05/2023</span>
-    <span>12:10</span>
-    <span>5 personnes</span>
-    <span>Pas d'alergies</span>
-  </a>
-  <a href="#">
-    <span>12/05/2023</span>
-    <span>12:10</span>
-    <span>5 personnes</span>
-    <span>Pas d'alergies</span>
-  </a>
-  <a href="#">
-    <span>12/05/2023</span>
-    <span>12:10</span>
-    <span>5 personnes</span>
-    <span>Pas d'alergies</span>
-  </a>
+
+<div class="container">
+  <!-- Zone de chargement -->
+  <div id="loading-reservations" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+    <p class="mt-2 text-muted">Chargement de vos réservations...</p>
+  </div>
+
+  <!-- Container principal des réservations -->
+  <div class="allreservations">
+    <!-- Le contenu sera généré dynamiquement par JavaScript -->
+  </div>
 </div>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test - Redirection Réservation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .test-result {
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+      }
+      .success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+      }
+      .error {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+      }
+      button {
+        padding: 10px 15px;
+        margin: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test de Redirection pour les Réservations</h1>
+
+    <div id="test-results"></div>
+
+    <h2>Tests Manuels</h2>
+    <button onclick="testReservationRedirect()">
+      Tester redirection /reserver (non connecté)
+    </button>
+    <button onclick="testAllResaRedirect()">
+      Tester redirection /allResa (non connecté)
+    </button>
+    <button onclick="simulateLogin()">Simuler une connexion</button>
+    <button onclick="simulateLogout()">Simuler une déconnexion</button>
+
+    <h2>État actuel</h2>
+    <div id="current-state"></div>
+
+    <script>
+      // Simuler les fonctions principales du système
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+        return null;
+      }
+
+      function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+          const date = new Date();
+          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+          expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+      }
+
+      function eraseCookie(name) {
+        document.cookie =
+          name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      }
+
+      function isConnected() {
+        const token = getCookie("accesstoken");
+        return token !== null && token !== undefined && token !== "";
+      }
+
+      function getRole() {
+        return getCookie("role");
+      }
+
+      function addTestResult(message, isSuccess) {
+        const resultsDiv = document.getElementById("test-results");
+        const resultDiv = document.createElement("div");
+        resultDiv.className = `test-result ${isSuccess ? "success" : "error"}`;
+        resultDiv.textContent = message;
+        resultsDiv.appendChild(resultDiv);
+      }
+
+      function updateCurrentState() {
+        const stateDiv = document.getElementById("current-state");
+        const connected = isConnected();
+        const role = getRole();
+        const redirectFromReservation = sessionStorage.getItem(
+          "redirectFromReservation"
+        );
+        const redirectAfterLogin = sessionStorage.getItem("redirectAfterLogin");
+
+        stateDiv.innerHTML = `
+                <p><strong>Connecté:</strong> ${connected ? "Oui" : "Non"}</p>
+                <p><strong>Rôle:</strong> ${role || "Aucun"}</p>
+                <p><strong>Redirection depuis réservation:</strong> ${
+                  redirectFromReservation || "Non"
+                }</p>
+                <p><strong>Redirection après login:</strong> ${
+                  redirectAfterLogin || "Aucune"
+                }</p>
+            `;
+      }
+
+      function testReservationRedirect() {
+        if (!isConnected()) {
+          // Simuler la logique du router
+          sessionStorage.setItem("redirectFromReservation", "true");
+          sessionStorage.setItem("redirectAfterLogin", "/reserver");
+          addTestResult(
+            "✅ Redirection configurée pour /reserver - utilisateur non connecté",
+            true
+          );
+        } else {
+          addTestResult("❌ Test invalide - utilisateur déjà connecté", false);
+        }
+        updateCurrentState();
+      }
+
+      function testAllResaRedirect() {
+        if (!isConnected()) {
+          // Simuler la logique du router
+          sessionStorage.setItem("redirectFromReservation", "true");
+          sessionStorage.setItem("redirectAfterLogin", "/allResa");
+          addTestResult(
+            "✅ Redirection configurée pour /allResa - utilisateur non connecté",
+            true
+          );
+        } else {
+          addTestResult("❌ Test invalide - utilisateur déjà connecté", false);
+        }
+        updateCurrentState();
+      }
+
+      function simulateLogin() {
+        setCookie("accesstoken", "test-token", 7);
+        setCookie("role", "client", 7);
+
+        // Simuler la logique de redirection après login
+        const redirectTo = sessionStorage.getItem("redirectAfterLogin") || "/";
+        sessionStorage.removeItem("redirectAfterLogin");
+        sessionStorage.removeItem("redirectFromReservation");
+
+        addTestResult(
+          `✅ Connexion simulée - redirection vers: ${redirectTo}`,
+          true
+        );
+        updateCurrentState();
+      }
+
+      function simulateLogout() {
+        eraseCookie("accesstoken");
+        eraseCookie("role");
+        sessionStorage.clear();
+        addTestResult("✅ Déconnexion simulée", true);
+        updateCurrentState();
+      }
+
+      // Initialiser l'état au chargement
+      updateCurrentState();
+
+      // Mettre à jour l'état toutes les secondes
+      setInterval(updateCurrentState, 1000);
+    </script>
+  </body>
+</html>

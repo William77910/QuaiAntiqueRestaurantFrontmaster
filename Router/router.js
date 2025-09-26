@@ -41,13 +41,38 @@ const LoadContentPage = async () => {
       // Vérification si l'utilisateur est déconnecté
       if (isConnected()) {
         // Si l'utilisateur est connecté, redirection vers la page d'accueil
-        window.location.replace("/"); // Redirection vers la page d'accueil
+        if (typeof window.navigateTo === "function") {
+          window.navigateTo("/");
+        } else {
+          window.location.replace("/");
+        }
+        return; // Arrêter l'exécution
       }
     } else {
       const roleUser = getRole(); // Récupération du rôle de l'utilisateur
       if (!allRolesArrays.includes(roleUser)) {
         // Vérification si le rôle de l'utilisateur est autorisé
-        window.location.replace("/"); // Redirection vers la page d'accueil
+
+        // Si l'utilisateur n'est pas connecté et essaie d'accéder à une page de réservation,
+        // le rediriger vers la page de connexion avec un paramètre
+        if (!isConnected() && (path === "/reserver" || path === "/allResa")) {
+          // Stocker temporairement l'information de redirection
+          sessionStorage.setItem("redirectFromReservation", "true");
+          sessionStorage.setItem("redirectAfterLogin", path);
+          if (typeof window.navigateTo === "function") {
+            window.navigateTo("/signin");
+          } else {
+            window.location.replace("/signin");
+          }
+        } else {
+          // Sinon, redirection vers la page d'accueil
+          if (typeof window.navigateTo === "function") {
+            window.navigateTo("/");
+          } else {
+            window.location.replace("/");
+          }
+        }
+        return; // Arrêter l'exécution
       }
     }
   }
@@ -80,6 +105,10 @@ const LoadContentPage = async () => {
   document.title = actualRoute.title + " - " + websiteName; // Mise à jour du titre de la page avec le nom du site
   // Afficher ou masquer les éléments en fonction du rôle
   showAndHideElementsForRoles(); // Fonction pour afficher ou masquer les éléments en fonction du rôle de l'utilisateur
+  // Réinitialiser le bouton de déconnexion
+  if (typeof initSignoutButton === "function") {
+    initSignoutButton();
+  }
 };
 
 // Fonction pour gérer les événements de routage (clic sur les liens)
@@ -91,9 +120,19 @@ const routeEvent = (event) => {
   // Chargement du contenu de la nouvelle page
   LoadContentPage();
 };
+// Fonction pour naviguer programmatiquement vers une route
+const navigateTo = (url) => {
+  // Mise à jour de l'URL dans l'historique du navigateur
+  window.history.pushState({}, "", url);
+  // Chargement du contenu de la nouvelle page
+  LoadContentPage();
+};
+
 // Gestion de l'événement de retour en arrière dans l'historique du navigateur
 window.onpopstate = LoadContentPage;
 // Assignation de la fonction routeEvent à la propriété route de la fenêtre
 window.route = routeEvent;
+// Assignation de la fonction navigateTo à la propriété navigateTo de la fenêtre
+window.navigateTo = navigateTo;
 // Chargement du contenu de la page au chargement initial
 LoadContentPage();
