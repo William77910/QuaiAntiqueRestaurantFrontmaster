@@ -97,6 +97,19 @@ const LoadContentPage = async () => {
     scriptTag.setAttribute("type", "text/javascript"); // Définition du type de la balise script
     scriptTag.setAttribute("src", actualRoute.pathJS); // Définition de la source du script
     scriptTag.setAttribute("data-page-script", "true"); // Marqueur pour identifier les scripts de page
+
+    // Ajouter un événement de chargement pour initialiser la page si nécessaire
+    scriptTag.onload = function () {
+      // Appeler l'initialisation spécifique pour la page account
+      if (
+        actualRoute.pathJS.includes("account.js") &&
+        typeof window.initializeAccountPage === "function"
+      ) {
+        console.log("🔄 Appel de l'initialisation account depuis le router");
+        setTimeout(window.initializeAccountPage, 100);
+      }
+    };
+
     // Ajout de la balise script au corps du document
     document.querySelector("body").appendChild(scriptTag); // Ajout de la balise script au corps du document
   }

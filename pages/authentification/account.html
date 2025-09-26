@@ -4,7 +4,7 @@
   </div>
 </div>
 
-<div class="container py-4">
+<div class="container py-4 mb-5 content-with-footer-space">
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
       <form>
@@ -60,18 +60,28 @@
         </div>
         <div class="text-center">
           <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-            <button type="submit" class="btn btn-primary me-md-2">
+            <button
+              type="button"
+              id="modifyInfoBtn"
+              class="btn btn-primary me-md-2"
+              onclick="handleModifyClick()"
+            >
               Modifier vos informations
             </button>
-            <button type="submit" class="btn btn-danger">
+            <button
+              type="button"
+              id="deleteAccountBtn"
+              class="btn btn-danger"
+              onclick="handleDeleteClick()"
+            >
               Supprimer mon compte
             </button>
           </div>
         </div>
       </form>
 
-      <div class="text-center pt-3">
-        <!--ajoute le bouton menu avec un padding top de 3-->
+      <div class="text-center pt-3 pb-5">
+        <!--ajoute le bouton menu avec un padding top de 3 et bottom de 5-->
         <a href="/editPassword" onclick="route()" class="d-inline-block">
           Cliquez ici pour modifier votre mot de passe
         </a>

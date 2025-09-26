@@ -4,16 +4,25 @@
 // Include any default variable overrides here (though functions won't be available)
 // inclure toutes les variables par défault ici
 $primary: #906427;
-$secondary: #B6AC97;
-$dark: #392C1E;
+$secondary: #b6ac97;
+$dark: #392c1e;
 $black: #292222;
 $font-family-sans-serif: "Montserrat", sans-serif !default;
 $font-family-serif: "Hind Madurai", serif !default;
 
-
-
-
-
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // Then add additional custom code here
+
+// Fix pour éviter le chevauchement avec le footer en responsive
+.content-with-footer-space {
+  min-height: calc(100vh - 200px); // Réserve de l'espace pour le footer
+  padding-bottom: 100px; // Espace supplémentaire au bas
+}
+
+@media (max-width: 768px) {
+  .content-with-footer-space {
+    min-height: calc(100vh - 300px); // Plus d'espace sur mobile
+    padding-bottom: 150px; // Plus d'espace au bas sur mobile
+  }
+}

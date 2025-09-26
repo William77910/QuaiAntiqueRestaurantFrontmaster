@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Responsive Galerie</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="scss/main.css" />
+    <style>
+      /* Debug pour voir les limites */
+      .debug-footer {
+        background-color: rgba(255, 0, 0, 0.3) !important;
+        border: 2px solid red;
+      }
+
+      .debug-content {
+        background-color: rgba(0, 255, 0, 0.1);
+        border: 1px dashed green;
+      }
+
+      .test-info {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 12px;
+        z-index: 1000;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Info de test -->
+    <div class="test-info">
+      <div id="screen-info"></div>
+      <div id="footer-status"></div>
+    </div>
+
+    <!-- Header simplifié -->
+    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Test Galerie Responsive</a>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main id="main-page" class="debug-content">
+      <div class="hero-scene text-center text-white">
+        <div class="hero-scene-content">
+          <h1>Galerie</h1>
+        </div>
+      </div>
+
+      <div class="container content-with-footer-space">
+        <div class="text-center mb-4">
+          <button type="button" class="btn btn-primary">
+            Ajouter une photo
+          </button>
+        </div>
+
+        <div class="row row-cols-2 row-cols-lg-3">
+          <div class="col p-3">
+            <div class="image-card text-white">
+              <img
+                class="w-100 rounded"
+                src="images/food.jpg"
+                alt="nourriture"
+              />
+              <p class="titre-image">Nourriture</p>
+              <div class="action-image-buttons">
+                <button type="button" class="btn btn-warning btn-sm">
+                  Modifier
+                </button>
+                <button type="button" class="btn btn-danger btn-sm">
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col p-3">
+            <div class="image-card text-white">
+              <img class="w-100 rounded" src="images/sushi.jpg" alt="sushi" />
+              <p class="titre-image">Sushi</p>
+              <div class="action-image-buttons">
+                <button type="button" class="btn btn-warning btn-sm">
+                  Modifier
+                </button>
+                <button type="button" class="btn btn-danger btn-sm">
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col p-3">
+            <div class="image-card text-white">
+              <img class="w-100 rounded" src="images/vin.jpg" alt="vin" />
+              <p class="titre-image">Vin</p>
+              <div class="action-image-buttons">
+                <button type="button" class="btn btn-warning btn-sm">
+                  Modifier
+                </button>
+                <button type="button" class="btn btn-danger btn-sm">
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col p-3">
+            <div class="image-card text-white">
+              <img
+                class="w-100 rounded"
+                src="images/resto.jpg"
+                alt="restaurant"
+              />
+              <p class="titre-image">Restaurant</p>
+              <div class="action-image-buttons">
+                <button type="button" class="btn btn-warning btn-sm">
+                  Modifier
+                </button>
+                <button type="button" class="btn btn-danger btn-sm">
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dernière image pour tester le bas de page -->
+          <div class="col p-3">
+            <div class="image-card text-white">
+              <img class="w-100 rounded" src="images/chef.jpg" alt="chef" />
+              <p class="titre-image">Chef</p>
+              <div class="action-image-buttons">
+                <button type="button" class="btn btn-warning btn-sm">
+                  Modifier
+                </button>
+                <button type="button" class="btn btn-danger btn-sm">
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col p-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <h5>TEST FINAL</h5>
+                <p>Cette carte doit être visible complètement</p>
+                <button class="btn btn-success">Bouton test</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center footer debug-footer">
+      <div class="row">
+        <div class="col-12 col-lg-4">
+          <h5 class="text-primary">Horaires</h5>
+          <p>Du mardi au dimanche 12:00-14h00</p>
+        </div>
+        <div class="col-12 col-lg-4">
+          <h5 class="text-primary">Adresse</h5>
+          <p>73 Quai Charles de Gaulle, 69006 Lyon</p>
+        </div>
+        <div class="col-12 col-lg-4">
+          <h5 class="text-primary">Contact</h5>
+          <p>contact@quai-antique.fr</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function updateDebugInfo() {
+        const screenInfo = document.getElementById("screen-info");
+        const footerStatus = document.getElementById("footer-status");
+
+        screenInfo.textContent = `${window.innerWidth}x${window.innerHeight}`;
+
+        // Trouver le dernier élément de contenu
+        const lastCard = document.querySelector(
+          ".col:last-child .card, .col:last-child .image-card"
+        );
+        const footer = document.querySelector("footer");
+
+        if (lastCard && footer) {
+          const cardRect = lastCard.getBoundingClientRect();
+          const footerRect = footer.getBoundingClientRect();
+
+          const hasOverlap = cardRect.bottom > footerRect.top;
+          footerStatus.innerHTML = `
+                    Dernier élément: ${Math.round(cardRect.bottom)}px<br>
+                    Footer début: ${Math.round(footerRect.top)}px<br>
+                    ${hasOverlap ? "❌ CHEVAUCHEMENT" : "✅ ESPACE OK"}
+                `;
+
+          // Changer la couleur de debug selon le résultat
+          if (hasOverlap) {
+            document.querySelector(".debug-footer").style.borderColor = "red";
+          } else {
+            document.querySelector(".debug-footer").style.borderColor = "green";
+          }
+        }
+      }
+
+      // Mise à jour continue
+      setInterval(updateDebugInfo, 500);
+      window.addEventListener("resize", updateDebugInfo);
+    </script>
+  </body>
+</html>

@@ -1,8 +1,39 @@
-const mailInput = document.getElementById("EmailInput"); // Récupérer l'input email
-const passwordInput = document.getElementById("PasswordInput"); // Récupérer l'input password
-const btnSignin = document.getElementById("btnSignin"); // Récupérer le bouton de connexion
+console.log("🔑 Script signin.js chargé");
 
-btnSignin.addEventListener("click", checkCredentials); // Ajouter un écouteur d'événement au bouton de connexion
+// Attendre que le DOM soit prêt avant d'accéder aux éléments
+let mailInput, passwordInput, btnSignin;
+
+// Initialiser les éléments une fois le DOM prêt
+function initializeSigninElements() {
+  mailInput = document.getElementById("EmailInput"); // Récupérer l'input email
+  passwordInput = document.getElementById("PasswordInput"); // Récupérer l'input password
+  btnSignin = document.getElementById("btnSignin"); // Récupérer le bouton de connexion
+
+  console.log("🔍 Éléments signin trouvés:");
+  console.log("- Email input:", !!mailInput);
+  console.log("- Password input:", !!passwordInput);
+  console.log("- Signin button:", !!btnSignin);
+
+  if (btnSignin) {
+    btnSignin.addEventListener("click", checkCredentials); // Ajouter un écouteur d'événement au bouton de connexion
+    console.log("✅ Event listener ajouté au bouton signin");
+  } else {
+    console.error("❌ Bouton signin non trouvé !");
+  }
+}
+
+// Initialiser dès que possible avec plusieurs tentatives
+setTimeout(initializeSigninElements, 100);
+setTimeout(initializeSigninElements, 500);
+setTimeout(initializeSigninElements, 1000);
+
+// Debug: vérifier si les éléments sont présents toutes les secondes
+setInterval(() => {
+  const btn = document.getElementById("btnSignin");
+  if (!btn) {
+    console.warn("⚠️ Bouton signin toujours introuvable");
+  }
+}, 2000);
 
 // Vérifier si l'utilisateur a été redirigé depuis une tentative de réservation
 document.addEventListener("DOMContentLoaded", function () {
@@ -35,19 +66,31 @@ function checkCredentials(event) {
   // Utilisateurs de test avec leurs informations
   const testUsers = {
     "test@email.com": { password: "123", role: "client", name: "John Doe" },
-    "admin@email.com": { password: "admin", role: "admin", name: "Administrateur" },
-    "client2@email.com": { password: "marie", role: "client", name: "Marie Martin" },
-    "client3@email.com": { password: "pierre", role: "client", name: "Pierre Dupont" }
+    "admin@email.com": {
+      password: "admin",
+      role: "admin",
+      name: "Administrateur",
+    },
+    "client2@email.com": {
+      password: "marie",
+      role: "client",
+      name: "Marie Martin",
+    },
+    "client3@email.com": {
+      password: "pierre",
+      role: "client",
+      name: "Pierre Dupont",
+    },
   };
-  
+
   const user = testUsers[mailInput.value];
-  
+
   if (user && passwordInput.value === user.password) {
     // Si les identifiants sont corrects
     alert(`Bienvenue ${user.name} !`);
 
     // Stocker l'email de l'utilisateur pour le filtrage des réservations
-    sessionStorage.setItem('currentUserEmail', mailInput.value);
+    sessionStorage.setItem("currentUserEmail", mailInput.value);
 
     // Ici, vous pouvez stocker le token JWT dans le localStorage ou le sessionStorage
     // il faudra récupérer le vrai token

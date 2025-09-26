@@ -4,191 +4,195 @@
   </div>
 </div>
 
-<!-- Bouton pour ajouter une nouvelle section (admin uniquement) -->
-<div class="container text-center mb-4" data-show="admin">
-  <button
-    type="button"
-    class="btn btn-success btn-add-section"
-    id="addSectionBtn"
-  >
-    ➕ Ajouter une section
-  </button>
+<!-- Conteneur principal avec espace footer -->
+<div class="content-with-footer-space">
+  <!-- Bouton pour ajouter une nouvelle section (admin uniquement) -->
+  <div class="container text-center mb-4" data-show="admin">
+    <button
+      type="button"
+      class="btn btn-success btn-add-section"
+      id="addSectionBtn"
+    >
+      ➕ Ajouter une section
+    </button>
+  </div>
+
+  <section>
+    <article data-section-id="1" class="menu-section">
+      <div class="container p-4 position-relative">
+        <!--ajoute un padding de 4-->
+        <!-- Boutons d'administration -->
+        <div
+          class="admin-controls position-absolute"
+          style="top: 10px; right: 10px"
+          data-show="admin"
+        >
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-primary btn-edit-section"
+            data-section-id="1"
+            data-section-title="Le plat du jour"
+            data-section-description='The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.'
+            data-section-image="../images/food.jpg"
+          >
+            ✏️ Modifier
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-danger btn-delete-section"
+            data-section-id="1"
+            data-section-title="Le plat du jour"
+          >
+            🗑️ Supprimer
+          </button>
+        </div>
+
+        <h2 class="text-center text-primary section-title">Le plat du jour</h2>
+        <!--ajoute un titre centré et en couleur primary-->
+        <div class="row row-cols-2 align-items-center">
+          <!--ajoute une rangée de 2 colonnes-->
+          <div class="col">
+            <!--ajoute une colonne-->
+            <p class="text-justify section-description">
+              <!--ajoute un texte justifié-->
+              The standard chunk of Lorem Ipsum used since the 1500s is
+              reproduced below for those interested. Sections 1.10.32 and
+              1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also
+              reproduced in their exact original form, accompanied by English
+              versions from the 1914 translation by H. Rackham.
+            </p>
+          </div>
+          <div class="col">
+            <!--ajoute une colonne-->
+            <img
+              class="w-100 rounded section-image"
+              src="../images/food.jpg"
+              alt="Plat du jour"
+            />
+            <!--ajoute une image du chef Arnaud Michant en 100%-->
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="bg-black text-white menu-section" data-section-id="2">
+      <!--ajoute un fond noir et un texte blanc-->
+      <div class="container p-4 position-relative">
+        <!--ajoute un padding de 4-->
+        <!-- Boutons d'administration -->
+        <div
+          class="admin-controls position-absolute"
+          style="top: 10px; right: 10px"
+          data-show="admin"
+        >
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-light btn-edit-section"
+            data-section-id="2"
+            data-section-title="Les vins"
+            data-section-description="Découvrez la richesse des saveurs avec nos vins primés."
+            data-section-image="../images/vin.jpg"
+          >
+            ✏️ Modifier
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-light btn-delete-section"
+            data-section-id="2"
+            data-section-title="Les vins"
+          >
+            🗑️ Supprimer
+          </button>
+        </div>
+
+        <h2 class="text-center text-primary section-title">Les vins</h2>
+        <!--ajoute un titre centré et en couleur primary-->
+        <div class="row row-cols-2 align-items-center">
+          <!--ajoute une rangée de 2 colonnes-->
+          <div class="col">
+            <!--ajoute une colonne-->
+            <img
+              class="w-100 rounded section-image"
+              src="../images/vin.jpg"
+              alt="Bouteille de vin"
+            />
+            <!--ajoute une image du chef Arnaud Michant en 100%-->
+          </div>
+          <div class="col">
+            <!--ajoute une colonne-->
+            <p class="text-justify section-description">
+              <!--ajoute un texte justifié-->
+              Découvrez la richesse des saveurs avec nos vins primés.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="menu-section" data-section-id="3">
+      <div class="container p-4 position-relative">
+        <!--ajoute un padding de 4-->
+        <!-- Boutons d'administration -->
+        <div
+          class="admin-controls position-absolute"
+          style="top: 10px; right: 10px"
+          data-show="admin"
+        >
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-primary btn-edit-section"
+            data-section-id="3"
+            data-section-title="Les desserts"
+            data-section-description="De quoi finir en douceur."
+            data-section-image="../images/resto.jpg"
+          >
+            ✏️ Modifier
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-primary btn-delete-section"
+            data-section-id="3"
+            data-section-title="Les desserts"
+          >
+            🗑️ Supprimer
+          </button>
+        </div>
+
+        <h2 class="text-center text-primary section-title">Les desserts</h2>
+        <!--ajoute un titre centré et en couleur primary-->
+        <div class="row row-cols-2 align-items-center">
+          <!--ajoute une rangée de 2 colonnes-->
+          <div class="col">
+            <!--ajoute une colonne-->
+            <p class="text-justify section-description">
+              <!--ajoute un texte justifié-->
+              De quoi finir en douceur.
+            </p>
+          </div>
+          <div class="col">
+            <!--ajoute une colonne-->
+            <img
+              class="w-100 rounded section-image"
+              src="../images/resto.jpg"
+              alt="Dessert du restaurant"
+            />
+            <!--ajoute une image du chef Arnaud Michant en 100%-->
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Bouton d'ajout pour les administrateurs -->
+  <div class="text-center mb-4" data-show="admin">
+    <button type="button" class="btn btn-success" id="btn-add-section">
+      ➕ Ajouter une section
+    </button>
+  </div>
+
+  <div class="text-center">
+    <a href="/reserver" class="btn btn-primary" onclick="route()">Réserver</a>
+  </div>
 </div>
-
-<section>
-  <article data-section-id="1" class="menu-section">
-    <div class="container p-4 position-relative">
-      <!--ajoute un padding de 4-->
-      <!-- Boutons d'administration -->
-      <div
-        class="admin-controls position-absolute"
-        style="top: 10px; right: 10px"
-        data-show="admin"
-      >
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-primary btn-edit-section"
-          data-section-id="1"
-          data-section-title="Le plat du jour"
-          data-section-description='The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.'
-          data-section-image="../images/food.jpg"
-        >
-          ✏️ Modifier
-        </button>
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-danger btn-delete-section"
-          data-section-id="1"
-          data-section-title="Le plat du jour"
-        >
-          🗑️ Supprimer
-        </button>
-      </div>
-
-      <h2 class="text-center text-primary section-title">Le plat du jour</h2>
-      <!--ajoute un titre centré et en couleur primary-->
-      <div class="row row-cols-2 align-items-center">
-        <!--ajoute une rangée de 2 colonnes-->
-        <div class="col">
-          <!--ajoute une colonne-->
-          <p class="text-justify section-description">
-            <!--ajoute un texte justifié-->
-            The standard chunk of Lorem Ipsum used since the 1500s is reproduced
-            below for those interested. Sections 1.10.32 and 1.10.33 from "de
-            Finibus Bonorum et Malorum" by Cicero are also reproduced in their
-            exact original form, accompanied by English versions from the 1914
-            translation by H. Rackham.
-          </p>
-        </div>
-        <div class="col">
-          <!--ajoute une colonne-->
-          <img
-            class="w-100 rounded section-image"
-            src="../images/food.jpg"
-            alt="Plat du jour"
-          />
-          <!--ajoute une image du chef Arnaud Michant en 100%-->
-        </div>
-      </div>
-    </div>
-  </article>
-  <article class="bg-black text-white menu-section" data-section-id="2">
-    <!--ajoute un fond noir et un texte blanc-->
-    <div class="container p-4 position-relative">
-      <!--ajoute un padding de 4-->
-      <!-- Boutons d'administration -->
-      <div
-        class="admin-controls position-absolute"
-        style="top: 10px; right: 10px"
-        data-show="admin"
-      >
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-light btn-edit-section"
-          data-section-id="2"
-          data-section-title="Les vins"
-          data-section-description="Découvrez la richesse des saveurs avec nos vins primés."
-          data-section-image="../images/vin.jpg"
-        >
-          ✏️ Modifier
-        </button>
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-light btn-delete-section"
-          data-section-id="2"
-          data-section-title="Les vins"
-        >
-          🗑️ Supprimer
-        </button>
-      </div>
-
-      <h2 class="text-center text-primary section-title">Les vins</h2>
-      <!--ajoute un titre centré et en couleur primary-->
-      <div class="row row-cols-2 align-items-center">
-        <!--ajoute une rangée de 2 colonnes-->
-        <div class="col">
-          <!--ajoute une colonne-->
-          <img
-            class="w-100 rounded section-image"
-            src="../images/vin.jpg"
-            alt="Bouteille de vin"
-          />
-          <!--ajoute une image du chef Arnaud Michant en 100%-->
-        </div>
-        <div class="col">
-          <!--ajoute une colonne-->
-          <p class="text-justify section-description">
-            <!--ajoute un texte justifié-->
-            Découvrez la richesse des saveurs avec nos vins primés.
-          </p>
-        </div>
-      </div>
-    </div>
-  </article>
-  <article class="menu-section" data-section-id="3">
-    <div class="container p-4 position-relative">
-      <!--ajoute un padding de 4-->
-      <!-- Boutons d'administration -->
-      <div
-        class="admin-controls position-absolute"
-        style="top: 10px; right: 10px"
-        data-show="admin"
-      >
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-primary btn-edit-section"
-          data-section-id="3"
-          data-section-title="Les desserts"
-          data-section-description="De quoi finir en douceur."
-          data-section-image="../images/resto.jpg"
-        >
-          ✏️ Modifier
-        </button>
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-primary btn-delete-section"
-          data-section-id="3"
-          data-section-title="Les desserts"
-        >
-          🗑️ Supprimer
-        </button>
-      </div>
-
-      <h2 class="text-center text-primary section-title">Les desserts</h2>
-      <!--ajoute un titre centré et en couleur primary-->
-      <div class="row row-cols-2 align-items-center">
-        <!--ajoute une rangée de 2 colonnes-->
-        <div class="col">
-          <!--ajoute une colonne-->
-          <p class="text-justify section-description">
-            <!--ajoute un texte justifié-->
-            De quoi finir en douceur.
-          </p>
-        </div>
-        <div class="col">
-          <!--ajoute une colonne-->
-          <img
-            class="w-100 rounded section-image"
-            src="../images/resto.jpg"
-            alt="Dessert du restaurant"
-          />
-          <!--ajoute une image du chef Arnaud Michant en 100%-->
-        </div>
-      </div>
-    </div>
-  </article>
-</section>
-
-<!-- Bouton d'ajout pour les administrateurs -->
-<div class="text-center mb-4" data-show="admin">
-  <button type="button" class="btn btn-success" id="btn-add-section">
-    ➕ Ajouter une section
-  </button>
-</div>
-
-<div class="text-center">
-  <a href="/reserver" class="btn btn-primary" onclick="route()">Réserver</a>
-</div>
+<!-- Fin du conteneur principal avec espace footer -->
 
 <!-- Modal pour ajouter/modifier une section -->
 <div
