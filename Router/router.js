@@ -108,6 +108,17 @@ const LoadContentPage = async () => {
         console.log("🔄 Appel de l'initialisation account depuis le router");
         setTimeout(window.initializeAccountPage, 100);
       }
+
+      // Appeler l'initialisation spécifique pour la page des réservations
+      if (
+        actualRoute.pathJS.includes("reservations-manager.js") &&
+        typeof window.initializeReservationsPage === "function"
+      ) {
+        console.log(
+          "🔄 Appel de l'initialisation réservations depuis le router"
+        );
+        setTimeout(window.initializeReservationsPage, 100);
+      }
     };
 
     // Ajout de la balise script au corps du document

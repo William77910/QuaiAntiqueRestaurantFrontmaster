@@ -17,12 +17,58 @@ $font-family-serif: "Hind Madurai", serif !default;
 // Fix pour éviter le chevauchement avec le footer en responsive
 .content-with-footer-space {
   min-height: calc(100vh - 200px); // Réserve de l'espace pour le footer
-  padding-bottom: 100px; // Espace supplémentaire au bas
+  padding-bottom: 50px; // Espace supplémentaire au bas
 }
 
 @media (max-width: 768px) {
   .content-with-footer-space {
     min-height: calc(100vh - 300px); // Plus d'espace sur mobile
     padding-bottom: 150px; // Plus d'espace au bas sur mobile
+  }
+}
+
+// Classe pour les pages avec contenu compact (formulaires, compte, etc.)
+.compact-content {
+  min-height: auto; // Pas de hauteur minimale fixe
+  padding-bottom: 80px; // Assez d'espace pour le footer et tous les éléments
+}
+
+@media (max-width: 768px) {
+  .compact-content {
+    padding-bottom: 200px; // Beaucoup plus d'espace sur mobile pour éviter que les éléments soient cachés
+  }
+}
+
+@media (max-width: 576px) {
+  .compact-content {
+    padding-bottom: 250px; // Encore plus d'espace sur très petit écran
+  }
+}
+
+// Fix spécifique pour les boutons sur la page account en responsive
+@media (max-width: 768px) {
+  .compact-content .d-grid {
+    margin-bottom: 2rem; // Marge importante après les boutons
+  }
+
+  .compact-content .text-center:last-child {
+    margin-bottom: 3rem; // Encore plus de marge pour le lien du mot de passe
+  }
+}
+
+@media (max-width: 576px) {
+  .compact-content .d-grid {
+    gap: 0.75rem !important; // Réduire l'espace entre les boutons
+    margin-bottom: 2.5rem; // Encore plus de marge après les boutons
+  }
+
+  .compact-content .btn {
+    font-size: 0.9rem; // Réduire légèrement la taille de police des boutons
+    padding: 0.5rem 1rem; // Réduire le padding pour qu'ils tiennent mieux
+  }
+
+  // S'assurer que le lien du mot de passe reste visible
+  .compact-content .text-center:last-child {
+    margin-bottom: 4rem; // Beaucoup de marge pour éviter que le footer cache le lien
   }
 }

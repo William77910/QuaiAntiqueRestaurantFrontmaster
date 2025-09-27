@@ -85,20 +85,34 @@ function getFilteredReservations() {
   const userRole = getRole();
   const userEmail = getCurrentUserEmail();
 
+  console.log("🔍 getFilteredReservations - Rôle:", userRole);
+  console.log("🔍 getFilteredReservations - Email:", userEmail);
+
   if (!userRole || !userEmail) {
+    console.log("❌ Rôle ou email manquant, retour tableau vide");
     return [];
   }
 
   if (userRole === "admin") {
     // L'administrateur voit toutes les réservations
+    console.log(
+      "✅ Mode admin - Retour de toutes les réservations:",
+      reservationsData.length
+    );
     return reservationsData;
   } else if (userRole === "client") {
     // Le client ne voit que ses propres réservations
-    return reservationsData.filter(
+    const clientReservations = reservationsData.filter(
       (reservation) => reservation.userId === userEmail
     );
+    console.log(
+      "✅ Mode client - Réservations filtrées:",
+      clientReservations.length
+    );
+    return clientReservations;
   }
 
+  console.log("❌ Rôle non reconnu, retour tableau vide");
   return [];
 }
 
@@ -202,15 +216,25 @@ function generateReservationHTML(reservation, isAdmin = false) {
 
 // Fonction pour afficher les réservations
 function displayReservations() {
-  console.log("Affichage des réservations...");
+  console.log("🔄 Affichage des réservations...");
 
   const reservationsContainer = document.querySelector(".allreservations");
   const loadingElement = document.getElementById("loading-reservations");
 
   if (!reservationsContainer) {
-    console.error("Container des réservations non trouvé");
+    console.error("❌ Container des réservations non trouvé");
     return;
   }
+
+  // 🔍 DEBUGGING : Vérifier les données utilisateur
+  const userRole = getRole();
+  const userEmail = getCurrentUserEmail();
+  console.log("🔍 DEBUG - Rôle utilisateur:", userRole);
+  console.log("🔍 DEBUG - Email utilisateur:", userEmail);
+  console.log(
+    "🔍 DEBUG - Total réservations disponibles:",
+    reservationsData.length
+  );
 
   // Afficher l'indicateur de chargement
   if (loadingElement) {
@@ -482,20 +506,37 @@ function exportReservations() {
 }
 
 // Initialisation au chargement de la page
-document.addEventListener("DOMContentLoaded", function () {
-  // Vérifier si nous sommes sur la page des réservations
-  if (
-    window.location.pathname === "/allResa" ||
-    document.body.innerHTML.includes("Vos réservations")
-  ) {
-    displayReservations();
-  }
-});
+// 🚀 INITIALISATION ROBUSTE
+function initializeReservationsPage() {
+  console.log("🔧 Tentative d'initialisation des réservations...");
 
-// Initialiser dès que possible si la page est déjà chargée
+  // Vérifier si nous sommes sur la page des réservations
+  const isReservationsPage =
+    window.location.pathname === "/allResa" ||
+    document.body.innerHTML.includes("Vos réservations") ||
+    document.querySelector(".allreservations");
+
+  if (isReservationsPage) {
+    console.log(
+      "✅ Page réservations détectée, lancement de displayReservations"
+    );
+    displayReservations();
+  } else {
+    console.log("❌ Pas sur la page réservations");
+  }
+}
+
+// Méthode 1: DOMContentLoaded
+document.addEventListener("DOMContentLoaded", initializeReservationsPage);
+
+// Méthode 2: Si DOM déjà chargé
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", displayReservations);
+  document.addEventListener("DOMContentLoaded", initializeReservationsPage);
 } else {
   // DOM déjà chargé
-  setTimeout(displayReservations, 100);
+  console.log("🔄 DOM déjà chargé, initialisation immédiate");
+  setTimeout(initializeReservationsPage, 100);
 }
+
+// Méthode 3: Fonction globale pour le router
+window.initializeReservationsPage = initializeReservationsPage;
