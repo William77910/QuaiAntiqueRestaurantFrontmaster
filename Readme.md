@@ -1,6 +1,9 @@
+
+LES INFORMATIONS CI-SDESSOUS SNT FICTIVES, LE SITE N4EST PAS TERMINE.
+
 # Bienvenue sur le Quai Antique
 
-Le Quai Antique est un restaurant gastronomique fictif, ayant pour site web : https://quaiantiqueparis.fr
+Le Quai Antique est un restaurant gastronomique fictif, ayant pour site web : https:/
 
 ## Spécifications Techniques
 
@@ -30,7 +33,7 @@ Pour installer le projet en local, suivez les étapes ci-dessous :
 1. Clonez le dépôt :
 
 ```bash
-git clone git@github.com:coraline9d/Quai-Antique.git
+git clone git@github.com:william77910/Quai-Antique.git
 ```
 
 2. Installez les dépendances PHP avec Composer :
