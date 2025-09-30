@@ -1,59 +1,114 @@
 // Gestion administrative de la carte du restaurant
+console.log("🍽️ Script carte-admin.js chargé");
 
 let sectionCounter = 4; // Compteur pour les nouveaux IDs (on a déjà 3 sections)
 
 // Initialisation des fonctionnalités d'administration
-function initCarteAdmin() {
-  console.log("Initialisation de la gestion administrative de la carte...");
+function initCarteAdminCore() {
+  console.log("🔧 Initialisation de la gestion administrative de la carte...");
 
-  // Gestionnaires d'événements pour les boutons d'ajout
-  const btnAddSection = document.getElementById("btn-add-section");
-  if (btnAddSection) {
-    btnAddSection.addEventListener("click", openAddSectionModal);
+  // Éviter les doublons d'initialisation
+  if (window.carteAdminInitialized) {
+    console.log("⚠️ Carte admin déjà initialisée, ignoré");
+    return;
   }
+  window.carteAdminInitialized = true;
+
+  // Gestionnaires d'événements pour les boutons d'ajout (il peut y en avoir plusieurs)
+  const btnAddSections = document.querySelectorAll(
+    "#btn-add-section, #addSectionBtn, .btn-add-section"
+  );
+  console.log("➕ Boutons ajouter section trouvés:", btnAddSections.length);
+
+  btnAddSections.forEach((btnAddSection) => {
+    if (
+      btnAddSection &&
+      !btnAddSection.hasAttribute("data-listener-attached")
+    ) {
+      btnAddSection.setAttribute("data-listener-attached", "true");
+      btnAddSection.addEventListener("click", openAddSectionModal);
+      console.log(
+        "✅ Event listener attaché au bouton:",
+        btnAddSection.id || btnAddSection.className
+      );
+    }
+  });
 
   // Gestionnaires d'événements pour les boutons de modification
   const editButtons = document.querySelectorAll(".btn-edit-section");
+  console.log("✏️ Boutons modifier section trouvés:", editButtons.length);
+
   editButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const sectionId = this.getAttribute("data-section-id");
-      const sectionTitle = this.getAttribute("data-section-title");
-      const sectionDescription = this.getAttribute("data-section-description");
-      const sectionImage = this.getAttribute("data-section-image");
-      openEditSectionModal(
-        sectionId,
-        sectionTitle,
-        sectionDescription,
-        sectionImage
-      );
-    });
+    // Vérifier si l'event listener n'est pas déjà attaché
+    if (!button.hasAttribute("data-listener-attached")) {
+      button.setAttribute("data-listener-attached", "true");
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        console.log("✏️ Clic sur bouton modifier section");
+
+        const sectionId = this.getAttribute("data-section-id");
+        const sectionTitle = this.getAttribute("data-section-title");
+        const sectionDescription = this.getAttribute(
+          "data-section-description"
+        );
+        const sectionImage = this.getAttribute("data-section-image");
+
+        console.log("📊 Données section:", { sectionId, sectionTitle });
+        openEditSectionModal(
+          sectionId,
+          sectionTitle,
+          sectionDescription,
+          sectionImage
+        );
+      });
+    }
   });
 
   // Gestionnaires d'événements pour les boutons de suppression
   const deleteButtons = document.querySelectorAll(".btn-delete-section");
+  console.log("🗑️ Boutons supprimer section trouvés:", deleteButtons.length);
+
   deleteButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const sectionId = this.getAttribute("data-section-id");
-      const sectionTitle = this.getAttribute("data-section-title");
-      openDeleteSectionModal(sectionId, sectionTitle);
-    });
+    // Vérifier si l'event listener n'est pas déjà attaché
+    if (!button.hasAttribute("data-listener-attached")) {
+      button.setAttribute("data-listener-attached", "true");
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        console.log("🗑️ Clic sur bouton supprimer section");
+
+        const sectionId = this.getAttribute("data-section-id");
+        const sectionTitle = this.getAttribute("data-section-title");
+
+        console.log("📊 Section à supprimer:", { sectionId, sectionTitle });
+        openDeleteSectionModal(sectionId, sectionTitle);
+      });
+    }
   });
 
   // Gestionnaire pour l'aperçu d'image
   const imageInput = document.getElementById("sectionImageFile");
-  if (imageInput) {
+  if (imageInput && !imageInput.hasAttribute("data-listener-attached")) {
+    imageInput.setAttribute("data-listener-attached", "true");
     imageInput.addEventListener("change", previewSectionImage);
   }
 
   // Gestionnaire pour la sauvegarde
   const saveSectionBtn = document.getElementById("saveSectionBtn");
-  if (saveSectionBtn) {
+  if (
+    saveSectionBtn &&
+    !saveSectionBtn.hasAttribute("data-listener-attached")
+  ) {
+    saveSectionBtn.setAttribute("data-listener-attached", "true");
     saveSectionBtn.addEventListener("click", saveSection);
   }
 
   // Gestionnaire pour la confirmation de suppression
   const confirmDeleteBtn = document.getElementById("confirmDeleteSectionBtn");
-  if (confirmDeleteBtn) {
+  if (
+    confirmDeleteBtn &&
+    !confirmDeleteBtn.hasAttribute("data-listener-attached")
+  ) {
+    confirmDeleteBtn.setAttribute("data-listener-attached", "true");
     confirmDeleteBtn.addEventListener("click", confirmDeleteSection);
   }
 }
@@ -76,8 +131,17 @@ function openAddSectionModal() {
   document.getElementById("sectionImageLeft").checked = false;
 
   // Ouvrir la modal
-  const modal = new bootstrap.Modal(document.getElementById("sectionModal"));
+  console.log("🔓 Ouverture de la modale d'ajout de section");
+  const modalElement = document.getElementById("sectionModal");
+
+  // Réutiliser l'instance existante ou en créer une nouvelle
+  let modal = bootstrap.Modal.getInstance(modalElement);
+  if (!modal) {
+    modal = new bootstrap.Modal(modalElement);
+  }
+
   modal.show();
+  console.log("✅ Modale d'ajout affichée");
 }
 
 // Ouvrir la modal de modification de section
@@ -143,8 +207,17 @@ function openEditSectionModal(sectionId, title, description, imageSrc) {
     "Modifier la section";
 
   // Ouvrir la modal
-  const modal = new bootstrap.Modal(document.getElementById("sectionModal"));
+  console.log("🔓 Ouverture de la modale de modification de section");
+  const modalElement = document.getElementById("sectionModal");
+
+  // Réutiliser l'instance existante ou en créer une nouvelle
+  let modal = bootstrap.Modal.getInstance(modalElement);
+  if (!modal) {
+    modal = new bootstrap.Modal(modalElement);
+  }
+
   modal.show();
+  console.log("✅ Modale de modification affichée");
 }
 
 // Ouvrir la modal de suppression de section
@@ -159,10 +232,17 @@ function openDeleteSectionModal(sectionId, title) {
     .getElementById("confirmDeleteSectionBtn")
     .setAttribute("data-section-id", sectionId);
 
-  const modal = new bootstrap.Modal(
-    document.getElementById("deleteSectionModal")
-  );
+  console.log("🔓 Ouverture de la modale de suppression de section");
+  const modalElement = document.getElementById("deleteSectionModal");
+
+  // Réutiliser l'instance existante ou en créer une nouvelle
+  let modal = bootstrap.Modal.getInstance(modalElement);
+  if (!modal) {
+    modal = new bootstrap.Modal(modalElement);
+  }
+
   modal.show();
+  console.log("✅ Modale de suppression affichée");
 }
 
 // Aperçu de l'image sélectionnée
@@ -226,10 +306,16 @@ function saveSection() {
   }
 
   // Fermer la modal
+  console.log("🔒 Fermeture de la modale de section");
   const modal = bootstrap.Modal.getInstance(
     document.getElementById("sectionModal")
   );
-  modal.hide();
+  if (modal) {
+    modal.hide();
+    console.log("✅ Modale de section fermée");
+  } else {
+    console.log("⚠️ Instance de modale de section non trouvée");
+  }
 }
 
 // Ajouter une nouvelle section
@@ -533,19 +619,63 @@ function confirmDeleteSection() {
   }
 
   // Fermer la modal
+  console.log("🔒 Fermeture de la modale de suppression");
   const modal = bootstrap.Modal.getInstance(
     document.getElementById("deleteSectionModal")
   );
-  modal.hide();
+  if (modal) {
+    modal.hide();
+    console.log("✅ Modale de suppression fermée");
+  } else {
+    console.log("⚠️ Instance de modale de suppression non trouvée");
+  }
 }
 
 // Initialiser lors du chargement de la page
 document.addEventListener("DOMContentLoaded", function () {
-  // Vérifier si nous sommes sur la page carte
-  if (
-    window.location.pathname === "/carte" ||
-    document.body.innerHTML.includes("Le plat du jour")
-  ) {
-    initCarteAdmin();
-  }
+  console.log("🔧 DOM chargé pour carte-admin");
+  initCarteAdminPage();
 });
+
+// Fonction globale pour le router
+window.initCarteAdmin = initCarteAdminPage;
+
+function initCarteAdminPage() {
+  console.log("🔧 initCarteAdminPage appelé");
+
+  // Réinitialiser le flag pour permettre une nouvelle initialisation
+  window.carteAdminInitialized = false;
+
+  // Supprimer les anciens attributs de listeners pour permettre la réinitialisation
+  document
+    .querySelectorAll(
+      ".btn-edit-section, .btn-delete-section, #btn-add-section, #addSectionBtn, .btn-add-section, #saveSectionBtn, #confirmDeleteSectionBtn, #sectionImageFile"
+    )
+    .forEach((btn) => {
+      btn.removeAttribute("data-listener-attached");
+    });
+
+  // Vérifier si nous sommes sur la page carte
+  const isCartePage =
+    window.location.pathname === "/carte" ||
+    document.body.innerHTML.includes("Le plat du jour") ||
+    document.querySelector(".menu-section");
+
+  if (isCartePage) {
+    console.log("✅ Page carte détectée, initialisation...");
+    initCarteAdminCore(); // ✅ CORRECTION: Appeler la vraie fonction d'initialisation
+  } else {
+    console.log("❌ Pas sur la page carte");
+  }
+}
+
+// Fonction globale pour le router (remplace la fonction existante)
+window.initCarteAdmin = initCarteAdminPage;
+
+// Initialisation robuste avec fallbacks
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initCarteAdminPage);
+} else {
+  console.log("🔄 DOM déjà chargé pour carte, initialisation immédiate");
+  setTimeout(initCarteAdminPage, 100);
+}

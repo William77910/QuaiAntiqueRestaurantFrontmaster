@@ -119,6 +119,24 @@ const LoadContentPage = async () => {
         );
         setTimeout(window.initializeReservationsPage, 100);
       }
+
+      // Appeler l'initialisation spécifique pour la galerie
+      if (
+        actualRoute.pathJS.includes("galerie-admin.js") &&
+        typeof window.initGalleryAdmin === "function"
+      ) {
+        console.log("🔄 Appel de l'initialisation galerie depuis le router");
+        setTimeout(window.initGalleryAdmin, 100);
+      }
+
+      // Appeler l'initialisation spécifique pour la carte
+      if (
+        actualRoute.pathJS.includes("carte-admin.js") &&
+        typeof window.initCarteAdmin === "function"
+      ) {
+        console.log("🔄 Appel de l'initialisation carte depuis le router");
+        setTimeout(window.initCarteAdmin, 100);
+      }
     };
 
     // Ajout de la balise script au corps du document

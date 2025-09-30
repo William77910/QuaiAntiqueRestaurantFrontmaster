@@ -1,42 +1,85 @@
 // Script pour la gestion de la galerie par l'administrateur
+console.log("🖼️ Script galerie-admin.js chargé");
 
 let currentPhotoData = null;
 
 // Initialisation des événements une fois le DOM chargé
 document.addEventListener("DOMContentLoaded", function () {
-  initGalleryAdmin();
+  console.log("🔧 Initialisation de la galerie admin");
+  initGalleryAdminPage(); // ✅ CORRECTION: Appeler la fonction wrapper
 });
 
-function initGalleryAdmin() {
+// Fonction globale pour le router
+window.initGalleryAdmin = initGalleryAdminPage; // ✅ CORRECTION: Pointer vers la bonne fonction
+
+function initGalleryAdminCore() {
+  console.log("🔄 initGalleryAdmin appelé");
+
+  // Éviter les doublons d'initialisation
+  if (window.galleryAdminInitialized) {
+    console.log("⚠️ Galerie admin déjà initialisée, ignoré");
+    return;
+  }
+  window.galleryAdminInitialized = true;
+
   // Gestion des boutons d'édition
   const editButtons = document.querySelectorAll(".btn-edit");
-  editButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const photoId = this.getAttribute("data-photo-id");
-      const photoTitle = this.getAttribute("data-photo-title");
-      const photoSrc = this.getAttribute("data-photo-src");
+  console.log("📝 Boutons modifier trouvés:", editButtons.length);
 
-      openEditModal(photoId, photoTitle, photoSrc);
-    });
+  editButtons.forEach((button) => {
+    // Vérifier si l'event listener n'est pas déjà attaché
+    if (!button.hasAttribute("data-listener-attached")) {
+      button.setAttribute("data-listener-attached", "true");
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        console.log("✏️ Clic sur bouton modifier");
+
+        const photoId = this.getAttribute("data-photo-id");
+        const photoTitle = this.getAttribute("data-photo-title");
+        const photoSrc = this.getAttribute("data-photo-src");
+
+        console.log("📊 Données photo:", { photoId, photoTitle, photoSrc });
+        openEditModal(photoId, photoTitle, photoSrc);
+      });
+    }
   });
 
   // Gestion des boutons de suppression
   const deleteButtons = document.querySelectorAll(".btn-delete");
-  deleteButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const photoId = this.getAttribute("data-photo-id");
-      const photoTitle = this.getAttribute("data-photo-title");
-      const photoSrc = this.getAttribute("data-photo-src");
+  console.log("🗑️ Boutons supprimer trouvés:", deleteButtons.length);
 
-      openDeleteModal(photoId, photoTitle, photoSrc);
-    });
+  deleteButtons.forEach((button) => {
+    // Vérifier si l'event listener n'est pas déjà attaché
+    if (!button.hasAttribute("data-listener-attached")) {
+      button.setAttribute("data-listener-attached", "true");
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        console.log("🗑️ Clic sur bouton supprimer");
+
+        const photoId = this.getAttribute("data-photo-id");
+        const photoTitle = this.getAttribute("data-photo-title");
+        const photoSrc = this.getAttribute("data-photo-src");
+
+        console.log("📊 Données photo à supprimer:", {
+          photoId,
+          photoTitle,
+          photoSrc,
+        });
+        openDeleteModal(photoId, photoTitle, photoSrc);
+      });
+    }
   });
 
   // Gestion du bouton "Ajouter une photo"
   const addButton = document.querySelector(
     'button[data-bs-target="#EditionPhotoModal"]'
   );
-  if (addButton && !addButton.classList.contains("btn-edit")) {
+  if (
+    addButton &&
+    !addButton.classList.contains("btn-edit") &&
+    !addButton.hasAttribute("data-listener-attached")
+  ) {
+    addButton.setAttribute("data-listener-attached", "true");
     addButton.addEventListener("click", function () {
       openEditModal(null, "", ""); // Mode ajout
     });
@@ -44,7 +87,8 @@ function initGalleryAdmin() {
 
   // Gestion du bouton de sauvegarde dans la modale d'édition
   const saveButton = document.querySelector("#EditionPhotoModal .btn-primary");
-  if (saveButton) {
+  if (saveButton && !saveButton.hasAttribute("data-listener-attached")) {
+    saveButton.setAttribute("data-listener-attached", "true");
     saveButton.addEventListener("click", savePhoto);
   }
 
@@ -52,7 +96,11 @@ function initGalleryAdmin() {
   const confirmDeleteButton = document.querySelector(
     "#DeletePhotoModal .btn-danger"
   );
-  if (confirmDeleteButton) {
+  if (
+    confirmDeleteButton &&
+    !confirmDeleteButton.hasAttribute("data-listener-attached")
+  ) {
+    confirmDeleteButton.setAttribute("data-listener-attached", "true");
     confirmDeleteButton.addEventListener("click", deletePhoto);
   }
 }
@@ -86,10 +134,17 @@ function openEditModal(photoId, photoTitle, photoSrc) {
   }
 
   // Ouvrir la modale
-  const modal = new bootstrap.Modal(
-    document.getElementById("EditionPhotoModal")
-  );
+  console.log("🔓 Ouverture de la modale d'édition");
+  const modalElement = document.getElementById("EditionPhotoModal");
+
+  // Réutiliser l'instance existante ou en créer une nouvelle
+  let modal = bootstrap.Modal.getInstance(modalElement);
+  if (!modal) {
+    modal = new bootstrap.Modal(modalElement);
+  }
+
   modal.show();
+  console.log("✅ Modale affichée");
 }
 
 function openDeleteModal(photoId, photoTitle, photoSrc) {
@@ -115,9 +170,14 @@ function openDeleteModal(photoId, photoTitle, photoSrc) {
   }
 
   // Ouvrir la modale
-  const modal = new bootstrap.Modal(
-    document.getElementById("DeletePhotoModal")
-  );
+  const modalElement = document.getElementById("DeletePhotoModal");
+
+  // Réutiliser l'instance existante ou en créer une nouvelle
+  let modal = bootstrap.Modal.getInstance(modalElement);
+  if (!modal) {
+    modal = new bootstrap.Modal(modalElement);
+  }
+
   modal.show();
 }
 
@@ -160,10 +220,16 @@ function savePhoto() {
   }
 
   // Fermer la modale
+  console.log("🔒 Fermeture de la modale d'édition");
   const modal = bootstrap.Modal.getInstance(
     document.getElementById("EditionPhotoModal")
   );
-  modal.hide();
+  if (modal) {
+    modal.hide();
+    console.log("✅ Modale fermée");
+  } else {
+    console.log("⚠️ Instance de modale non trouvée");
+  }
 }
 
 function deletePhoto() {
@@ -262,8 +328,8 @@ function addNewPhotoToGallery(title, imageFile) {
       galleryContainer.parentNode.querySelector(".text-center a");
     galleryContainer.appendChild(newPhotoElement);
 
-    // Réattacher les événements pour les nouveaux boutons
-    initGalleryAdmin();
+    // Attacher les événements uniquement aux nouveaux boutons
+    attachEventListenersToNewPhoto(newPhotoElement);
 
     // Appliquer les règles d'affichage pour les admin
     if (typeof showAndHideElementsForRoles === "function") {
@@ -271,4 +337,79 @@ function addNewPhotoToGallery(title, imageFile) {
     }
   };
   reader.readAsDataURL(imageFile);
+}
+
+// Fonction pour attacher les événements uniquement aux nouveaux éléments
+function attachEventListenersToNewPhoto(photoElement) {
+  const editButton = photoElement.querySelector(".btn-edit");
+  const deleteButton = photoElement.querySelector(".btn-delete");
+
+  if (editButton) {
+    editButton.addEventListener("click", function (e) {
+      e.preventDefault();
+      console.log("✏️ Clic sur bouton modifier (nouveau)");
+
+      const photoId = this.getAttribute("data-photo-id");
+      const photoTitle = this.getAttribute("data-photo-title");
+      const photoSrc = this.getAttribute("data-photo-src");
+
+      console.log("📊 Données photo:", { photoId, photoTitle, photoSrc });
+      openEditModal(photoId, photoTitle, photoSrc);
+    });
+  }
+
+  if (deleteButton) {
+    deleteButton.addEventListener("click", function (e) {
+      e.preventDefault();
+      console.log("🗑️ Clic sur bouton supprimer (nouveau)");
+
+      const photoId = this.getAttribute("data-photo-id");
+      const photoTitle = this.getAttribute("data-photo-title");
+      const photoSrc = this.getAttribute("data-photo-src");
+
+      console.log("📊 Données photo:", { photoId, photoTitle, photoSrc });
+      openDeleteModal(photoId, photoTitle, photoSrc);
+    });
+  }
+}
+
+// 🚀 INITIALISATION ROBUSTE POUR LE ROUTER
+function initGalleryAdminPage() {
+  console.log("🔧 initGalleryAdminPage appelé");
+
+  // Réinitialiser le flag pour permettre une nouvelle initialisation
+  window.galleryAdminInitialized = false;
+
+  // Supprimer les anciens attributs de listeners pour permettre la réinitialisation
+  document
+    .querySelectorAll(
+      '.btn-edit, .btn-delete, #EditionPhotoModal .btn-primary, #DeletePhotoModal .btn-danger, button[data-bs-target="#EditionPhotoModal"]'
+    )
+    .forEach((btn) => {
+      btn.removeAttribute("data-listener-attached");
+    });
+
+  // Vérifier si nous sommes sur la page galerie
+  const isGalleryPage =
+    window.location.pathname === "/galerie" ||
+    document.body.innerHTML.includes("Galerie") ||
+    document.querySelector(".image-card");
+
+  if (isGalleryPage) {
+    console.log("✅ Page galerie détectée, initialisation...");
+    initGalleryAdminCore(); // ✅ CORRECTION: Appeler la vraie fonction d'initialisation
+  } else {
+    console.log("❌ Pas sur la page galerie");
+  }
+}
+
+// Fonction globale pour le router (remplace la fonction existante)
+window.initGalleryAdmin = initGalleryAdminPage;
+
+// Initialisation robuste avec fallbacks
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initGalleryAdminPage);
+} else {
+  console.log("🔄 DOM déjà chargé pour galerie, initialisation immédiate");
+  setTimeout(initGalleryAdminPage, 100);
 }

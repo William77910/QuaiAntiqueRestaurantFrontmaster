@@ -61,6 +61,10 @@ document.addEventListener("DOMContentLoaded", function () {
 function checkCredentials(event) {
   if (event) event.preventDefault(); // Empêcher le comportement par défaut du formulaire
 
+  console.log("🔐 Tentative de connexion...");
+  console.log("📧 Email saisi:", mailInput.value);
+  console.log("🔑 Mot de passe saisi:", passwordInput.value);
+
   // ici il faut appeler l'API pour vérifier les credentials en BDD
 
   // Utilisateurs de test avec leurs informations
@@ -84,25 +88,37 @@ function checkCredentials(event) {
   };
 
   const user = testUsers[mailInput.value];
+  console.log("👤 Utilisateur trouvé:", user);
 
   if (user && passwordInput.value === user.password) {
     // Si les identifiants sont corrects
+    console.log("✅ Connexion réussie pour:", user.name, "| Rôle:", user.role);
     alert(`Bienvenue ${user.name} !`);
 
     // Stocker l'email de l'utilisateur pour le filtrage des réservations
     sessionStorage.setItem("currentUserEmail", mailInput.value);
+    console.log("💾 Email stocké dans sessionStorage:", mailInput.value);
 
     // Ici, vous pouvez stocker le token JWT dans le localStorage ou le sessionStorage
     // il faudra récupérer le vrai token
     const token = "mvorjavoja^vohjvôirvjn^rovn";
     setToken(token); // Appeler la fonction pour stocker le token
+    console.log("🎫 Token stocké:", token);
 
     // Définir le rôle selon l'utilisateur
     setCookie(RoleCookieName, user.role, 7); // 7 jours de validité
+    console.log("👥 Rôle défini:", user.role);
+
+    // Vérification immédiate des cookies
+    console.log("🔍 Vérification des cookies:");
+    console.log("- Token récupéré:", getToken());
+    console.log("- Rôle récupéré:", getRole());
+    console.log("- Utilisateur connecté?", isConnected());
 
     // Vérifier s'il y a une page de destination spécifique après connexion
     const redirectTo = sessionStorage.getItem("redirectAfterLogin") || "/";
     sessionStorage.removeItem("redirectAfterLogin"); // Nettoyer le storage
+    console.log("🔄 Redirection vers:", redirectTo);
 
     // Redirection vers la page appropriée en utilisant le système de routage SPA
     if (typeof window.navigateTo === "function") {
@@ -112,6 +128,15 @@ function checkCredentials(event) {
       window.location.replace(redirectTo);
     }
   } else {
+    console.log("❌ Échec de connexion");
+    console.log("- Utilisateur trouvé?", !!user);
+    if (user) {
+      console.log(
+        "- Mot de passe correct?",
+        passwordInput.value === user.password
+      );
+      console.log("- Mot de passe attendu:", user.password);
+    }
     mailInput.classList.add("is-invalid"); // Ajouter la classe is-invalid à l'input email
     passwordInput.classList.add("is-invalid"); // Ajouter la classe is-invalid à l'input password
   }
