@@ -78,7 +78,8 @@ function loadUserInformation() {
   const userEmail = sessionStorage.getItem("currentUserEmail");
 
   if (userEmail) {
-    console.log(`📧 Chargement des informations pour: ${userEmail}`);
+    // 🚨 SÉCURITÉ: Ne jamais logger l'email complet
+    console.log("📧 Chargement des informations utilisateur...");
 
     // Simuler le chargement des données utilisateur
     // Dans une vraie app, ceci serait un appel API
@@ -477,9 +478,8 @@ function handleDeleteAccount() {
 }
 
 function deleteUserAccount() {
-  const userEmail = sessionStorage.getItem("currentUserEmail");
-
-  console.log("🗑️ Suppression du compte:", userEmail);
+  // 🚨 SÉCURITÉ: Ne jamais logger l'email complet
+  console.log("🗑️ Suppression du compte en cours...");
 
   // Afficher un message de traitement
   showAlert(
@@ -597,7 +597,7 @@ function showAlert(title, message, type = "info") {
 
   // Supprimer automatiquement après 5 secondes
   setTimeout(() => {
-    if (alertContainer && alertContainer.parentNode) {
+    if (alertContainer?.parentNode) {
       alertContainer.remove();
     }
   }, 5000);

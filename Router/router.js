@@ -25,142 +25,169 @@ const getRouteByUrl = (url) => {
   }
 };
 
-// Fonction pour charger le contenu de la page
+// Fonction pour vérifier les autorisations d'accès
+const checkRouteAuthorization = (route) => {
+  const allRolesArrays = route.authorize;
+  const path = window.location.pathname;
 
-const LoadContentPage = async () => {
-  // Récupération de l'URL actuelle
-  const path = window.location.pathname; // Récupération du chemin de l'URL
-  const actualRoute = getRouteByUrl(path); // Récupération de la route correspondante
+  if (allRolesArrays.length === 0) {
+    return true; // Accessible à tous
+  }
 
-  // Vérification des autorisations d'accès à la page
-  const allRolesArrays = actualRoute.authorize; // Récupération des rôles autorisés
-
-  if (allRolesArrays.length > 0) {
-    // Vérification des autorisations
-    if (allRolesArrays.includes("disconnected")) {
-      // Vérification si l'utilisateur est déconnecté
-      if (isConnected()) {
-        // Si l'utilisateur est connecté, redirection vers la page d'accueil
-        if (typeof window.navigateTo === "function") {
-          window.navigateTo("/");
-        } else {
-          window.location.replace("/");
-        }
-        return; // Arrêter l'exécution
+  if (allRolesArrays.includes("disconnected")) {
+    // Page réservée aux utilisateurs déconnectés
+    const connected = isConnected();
+    if (connected) {
+      redirectToHome();
+      return false;
+    }
+  } else {
+    // Page réservée aux utilisateurs connectés
+    const connected = isConnected();
+    if (!connected) {
+      // Si l'utilisateur n'est pas connecté et essaie d'accéder à une page de réservation,
+      // le rediriger vers la page de connexion avec un paramètre
+      if (path === "/reserver" || path === "/allResa") {
+        sessionStorage.setItem("redirectFromReservation", "true");
+        sessionStorage.setItem("redirectAfterLogin", path);
       }
-    } else {
-      const roleUser = getRole(); // Récupération du rôle de l'utilisateur
-      if (!allRolesArrays.includes(roleUser)) {
-        // Vérification si le rôle de l'utilisateur est autorisé
+      redirectToSignin();
+      return false;
+    }
 
-        // Si l'utilisateur n'est pas connecté et essaie d'accéder à une page de réservation,
-        // le rediriger vers la page de connexion avec un paramètre
-        if (!isConnected() && (path === "/reserver" || path === "/allResa")) {
-          // Stocker temporairement l'information de redirection
-          sessionStorage.setItem("redirectFromReservation", "true");
-          sessionStorage.setItem("redirectAfterLogin", path);
-          if (typeof window.navigateTo === "function") {
-            window.navigateTo("/signin");
-          } else {
-            window.location.replace("/signin");
-          }
-        } else {
-          // Sinon, redirection vers la page d'accueil
-          if (typeof window.navigateTo === "function") {
-            window.navigateTo("/");
-          } else {
-            window.location.replace("/");
-          }
-        }
-        return; // Arrêter l'exécution
-      }
+    // Vérifier si le rôle de l'utilisateur est autorisé
+    const userRole = getRole();
+    if (!allRolesArrays.includes(userRole)) {
+      // Si l'utilisateur n'a pas le bon rôle, rediriger vers l'accueil
+      redirectToHome();
+      return false;
     }
   }
 
-  // Récupération du contenu HTML de la route
-  const html = await fetch(actualRoute.pathHtml).then((data) => data.text()); // Récupération du contenu HTML
+  return true;
+}; // Fonction pour rediriger vers la page d'accueil
+const redirectToHome = () => {
+  if (typeof window.navigateTo === "function") {
+    window.navigateTo("/");
+  } else {
+    window.location.replace("/");
+  }
+};
 
-  // Ajout du contenu HTML à l'élément avec l'ID "main-page"
-  document.getElementById("main-page").innerHTML = html; // Ajout du contenu HTML à l'élément avec l'ID "main-page"
+// Fonction pour rediriger vers la page de connexion
+const redirectToSignin = () => {
+  if (typeof window.navigateTo === "function") {
+    window.navigateTo("/signin");
+  } else {
+    window.location.replace("/signin");
+  }
+};
 
-  // Supprimer les anciens scripts de page pour éviter les conflits
+// Fonction pour supprimer les anciens scripts de page
+const removeOldPageScripts = () => {
   const existingPageScripts = document.querySelectorAll(
     "script[data-page-script]"
   );
   existingPageScripts.forEach((script) => script.remove());
+};
 
-  // Ajout du contenu JavaScript
-  if (actualRoute.pathJS != "") {
-    // Vérification si un fichier JavaScript est spécifié
-    // Création d'une balise script
-    const scriptTag = document.createElement("script"); // Création d'une balise script
-    scriptTag.setAttribute("type", "text/javascript"); // Définition du type de la balise script
-    scriptTag.setAttribute("src", actualRoute.pathJS); // Définition de la source du script
-    scriptTag.setAttribute("data-page-script", "true"); // Marqueur pour identifier les scripts de page
-
-    // Ajouter un événement de chargement pour initialiser la page si nécessaire
-    scriptTag.onload = function () {
-      // Appeler l'initialisation spécifique pour la page account
-      if (
-        actualRoute.pathJS.includes("account.js") &&
-        typeof window.initializeAccountPage === "function"
-      ) {
-        console.log("🔄 Appel de l'initialisation account depuis le router");
-        setTimeout(window.initializeAccountPage, 100);
-      }
-
-      // Appeler l'initialisation spécifique pour la page des réservations
-      if (
-        actualRoute.pathJS.includes("reservations-manager.js") &&
-        typeof window.initializeReservationsPage === "function"
-      ) {
-        console.log(
-          "🔄 Appel de l'initialisation réservations depuis le router"
-        );
-        setTimeout(window.initializeReservationsPage, 100);
-      }
-
-      // Appeler l'initialisation spécifique pour la galerie
-      if (
-        actualRoute.pathJS.includes("galerie-admin.js") &&
-        typeof window.initGalleryAdmin === "function"
-      ) {
-        console.log("🔄 Appel de l'initialisation galerie depuis le router");
-        setTimeout(window.initGalleryAdmin, 100);
-      }
-
-      // Appeler l'initialisation spécifique pour la carte
-      if (
-        actualRoute.pathJS.includes("carte-admin.js") &&
-        typeof window.initCarteAdmin === "function"
-      ) {
-        console.log("🔄 Appel de l'initialisation carte depuis le router");
-        setTimeout(window.initCarteAdmin, 100);
-      }
-    };
-
-    // Ajout de la balise script au corps du document
-    document.querySelector("body").appendChild(scriptTag); // Ajout de la balise script au corps du document
+// Fonction pour initialiser les pages spécifiques
+const initializeSpecificPages = (pathJS) => {
+  if (
+    pathJS.includes("account.js") &&
+    typeof window.initializeAccountPage === "function"
+  ) {
+    setTimeout(window.initializeAccountPage, 100);
   }
 
-  // Changement du titre de la page
-  document.title = actualRoute.title + " - " + websiteName; // Mise à jour du titre de la page avec le nom du site
-  // Afficher ou masquer les éléments en fonction du rôle
-  showAndHideElementsForRoles(); // Fonction pour afficher ou masquer les éléments en fonction du rôle de l'utilisateur
-  // Réinitialiser le bouton de déconnexion
-  if (typeof initSignoutButton === "function") {
-    initSignoutButton();
+  if (
+    pathJS.includes("reservations-manager.js") &&
+    typeof window.initializeReservationsPage === "function"
+  ) {
+    setTimeout(window.initializeReservationsPage, 100);
+  }
+
+  if (
+    pathJS.includes("galerie-admin.js") &&
+    typeof window.initGalleryAdmin === "function"
+  ) {
+    setTimeout(window.initGalleryAdmin, 100);
+  }
+
+  if (
+    pathJS.includes("carte-admin.js") &&
+    typeof window.initCarteAdmin === "function"
+  ) {
+    setTimeout(window.initCarteAdmin, 100);
   }
 };
 
-// Fonction pour gérer les événements de routage (clic sur les liens)
+// Fonction pour charger le script JavaScript d'une page
+const loadPageScript = (pathJS) => {
+  const scriptTag = document.createElement("script");
+  scriptTag.setAttribute("type", "text/javascript");
+  scriptTag.setAttribute("src", pathJS);
+  scriptTag.setAttribute("data-page-script", "true");
+
+  scriptTag.onload = function () {
+    initializeSpecificPages(pathJS);
+  };
+
+  document.querySelector("body").appendChild(scriptTag);
+};
+
+// Fonction pour charger le contenu de la page
+
+const LoadContentPage = async () => {
+  const path = window.location.pathname;
+
+  const actualRoute = getRouteByUrl(path);
+
+  // Vérification des autorisations
+  if (!checkRouteAuthorization(actualRoute)) {
+    return; // Arrêter l'exécution si non autorisé
+  }
+
+  try {
+    // Récupération du contenu HTML
+    const html = await fetch(actualRoute.pathHtml).then((data) => data.text());
+    // Ajout du contenu HTML à l'élément avec l'ID "main-page"
+    document.getElementById("main-page").innerHTML = html;
+
+    // Supprimer les anciens scripts
+    removeOldPageScripts();
+
+    // Charger le script JavaScript si spécifié
+    if (actualRoute.pathJS !== "") {
+      loadPageScript(actualRoute.pathJS);
+    }
+    // Mise à jour du titre et des éléments de l'interface
+    document.title = actualRoute.title + " - " + websiteName;
+    showAndHideElementsForRoles();
+
+    if (typeof initSignoutButton === "function") {
+      initSignoutButton();
+    }
+  } catch (error) {
+    console.error("Erreur lors du chargement de la page:", error);
+  }
+}; // Fonction pour gérer les événements de routage (clic sur les liens)
 const routeEvent = (event) => {
-  event = event || window.event;
   event.preventDefault();
   // Mise à jour de l'URL dans l'historique du navigateur
-  window.history.pushState({}, "", event.target.href);
+  window.history.pushState({}, "", event.currentTarget.href);
   // Chargement du contenu de la nouvelle page
   LoadContentPage();
+};
+
+// Fonction wrapper pour les appels onclick avec événement
+const route = (clickEvent) => {
+  // Si l'événement est passé, l'utiliser directement
+  if (clickEvent) {
+    routeEvent(clickEvent);
+  } else {
+    console.error("Aucun événement fourni pour la navigation");
+  }
 };
 // Fonction pour naviguer programmatiquement vers une route
 const navigateTo = (url) => {
@@ -172,8 +199,10 @@ const navigateTo = (url) => {
 
 // Gestion de l'événement de retour en arrière dans l'historique du navigateur
 window.onpopstate = LoadContentPage;
-// Assignation de la fonction routeEvent à la propriété route de la fenêtre
-window.route = routeEvent;
+// Assignation de la fonction route (wrapper) pour les onclick
+window.route = route;
+// Assignation de la fonction routeEvent pour les addEventListener
+window.routeEvent = routeEvent;
 // Assignation de la fonction navigateTo à la propriété navigateTo de la fenêtre
 window.navigateTo = navigateTo;
 // Chargement du contenu de la page au chargement initial

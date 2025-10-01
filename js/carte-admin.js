@@ -371,8 +371,6 @@ function createSectionHTML(
   imageLeft,
   imageSrc
 ) {
-  const sectionContainer = document.querySelector("section");
-
   // Déterminer les classes CSS
   const articleClasses = ["menu-section"];
   if (backgroundClass) articleClasses.push(backgroundClass);
@@ -404,13 +402,15 @@ function createSectionHTML(
                 </button>
             </div>
             
-            <h2 class="text-center section-title" style="color: ${
-              textClass === "text-white"
-                ? "white"
-                : textClass === "text-primary"
-                ? "var(--bs-primary)"
-                : "inherit"
-            }">${title}</h2>
+function getTextColor(textClass) {
+  if (textClass === "text-white") return "white";
+  if (textClass === "text-primary") return "var(--bs-primary)";
+  return "inherit";
+}
+
+            <h2 class="text-center section-title" style="color: ${getTextColor(
+              textClass
+            )}">${title}</h2>
             <div class="row row-cols-2 align-items-center">
                 ${
                   imageLeft
@@ -500,12 +500,7 @@ function updateSection(
   // Mettre à jour le titre
   const titleElement = sectionElement.querySelector(".section-title");
   titleElement.textContent = title;
-  titleElement.style.color =
-    textClass === "text-white"
-      ? "white"
-      : textClass === "text-primary"
-      ? "var(--bs-primary)"
-      : "inherit";
+  titleElement.style.color = getTextColor(textClass);
 
   // Mettre à jour la description
   const descriptionElement = sectionElement.querySelector(

@@ -62,8 +62,10 @@ function checkCredentials(event) {
   if (event) event.preventDefault(); // Empêcher le comportement par défaut du formulaire
 
   console.log("🔐 Tentative de connexion...");
-  console.log("📧 Email saisi:", mailInput.value);
-  console.log("🔑 Mot de passe saisi:", passwordInput.value);
+  // 🚨 SÉCURITÉ: Ne jamais logger l'email complet
+  console.log("📧 Email saisi - format valide:", mailInput.value.includes("@"));
+  // 🚨 SÉCURITÉ: Ne jamais logger les mots de passe
+  console.log("🔑 Champ mot de passe rempli:", !!passwordInput.value);
 
   // ici il faut appeler l'API pour vérifier les credentials en BDD
 
@@ -88,8 +90,9 @@ function checkCredentials(event) {
   };
 
   const user = testUsers[mailInput.value];
-  console.log("👤 Utilisateur trouvé:", user);
-
+  // 🚨 SÉCURITÉ: Ne pas exposer toutes les données utilisateur
+  // 🚨 SÉCURITÉ: Ne jamais logger l'email complet
+  console.log("👤 Utilisateur trouvé - Email valide | Rôle:", user.role);
   if (user && passwordInput.value === user.password) {
     // Si les identifiants sont corrects
     console.log("✅ Connexion réussie pour:", user.name, "| Rôle:", user.role);
@@ -97,13 +100,15 @@ function checkCredentials(event) {
 
     // Stocker l'email de l'utilisateur pour le filtrage des réservations
     sessionStorage.setItem("currentUserEmail", mailInput.value);
-    console.log("💾 Email stocké dans sessionStorage:", mailInput.value);
+    // 🚨 SÉCURITÉ: Ne jamais logger l'email complet en production
+    console.log("💾 Email stocké dans sessionStorage");
 
     // Ici, vous pouvez stocker le token JWT dans le localStorage ou le sessionStorage
     // il faudra récupérer le vrai token
     const token = "mvorjavoja^vohjvôirvjn^rovn";
     setToken(token); // Appeler la fonction pour stocker le token
-    console.log("🎫 Token stocké:", token);
+    // 🚨 SÉCURITÉ: Ne jamais logger le token en production
+    console.log("🎫 Token d'authentification généré et stocké");
 
     // Définir le rôle selon l'utilisateur
     setCookie(RoleCookieName, user.role, 7); // 7 jours de validité
@@ -111,7 +116,8 @@ function checkCredentials(event) {
 
     // Vérification immédiate des cookies
     console.log("🔍 Vérification des cookies:");
-    console.log("- Token récupéré:", getToken());
+    // 🚨 SÉCURITÉ: Ne jamais logger le token en production
+    console.log("- Token présent:", !!getToken());
     console.log("- Rôle récupéré:", getRole());
     console.log("- Utilisateur connecté?", isConnected());
 
@@ -135,7 +141,8 @@ function checkCredentials(event) {
         "- Mot de passe correct?",
         passwordInput.value === user.password
       );
-      console.log("- Mot de passe attendu:", user.password);
+      // 🚨 SÉCURITÉ: Ne jamais logger les mots de passe
+      console.log("- Vérification du mot de passe en cours...");
     }
     mailInput.classList.add("is-invalid"); // Ajouter la classe is-invalid à l'input email
     passwordInput.classList.add("is-invalid"); // Ajouter la classe is-invalid à l'input password

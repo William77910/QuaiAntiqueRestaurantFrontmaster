@@ -86,7 +86,8 @@ function getFilteredReservations() {
   const userEmail = getCurrentUserEmail();
 
   console.log("🔍 getFilteredReservations - Rôle:", userRole);
-  console.log("🔍 getFilteredReservations - Email:", userEmail);
+  // 🚨 SÉCURITÉ: Ne pas logger l'email complet
+  console.log("🔍 getFilteredReservations - Email présent:", !!userEmail);
 
   if (!userRole || !userEmail) {
     console.log("❌ Rôle ou email manquant, retour tableau vide");
@@ -127,6 +128,39 @@ function formatDate(dateString) {
   });
 }
 
+// Fonction pour générer les boutons d'actions client
+function getClientActionButtons(reservation) {
+  const canModify =
+    canModifyReservation(reservation.date, reservation.time) &&
+    reservation.status !== "annulée";
+
+  if (canModify) {
+    return `
+      <button type="button" class="btn btn-outline-primary btn-edit-client-reservation" 
+              data-reservation-id="${reservation.id}" title="Modifier">
+          ✏️
+      </button>
+      <button type="button" class="btn btn-outline-warning btn-cancel-client-reservation" 
+              data-reservation-id="${reservation.id}" title="Annuler">
+          ❌
+      </button>
+    `;
+  } else {
+    return `
+      <button type="button" class="btn btn-outline-secondary btn-contact-restaurant" 
+              data-reservation-id="${reservation.id}" 
+              data-action="modify" title="Contacter le restaurant">
+          ✏️
+      </button>
+      <button type="button" class="btn btn-outline-secondary btn-contact-restaurant" 
+              data-reservation-id="${reservation.id}" 
+              data-action="cancel" title="Contacter le restaurant">
+          ❌
+      </button>
+    `;
+  }
+}
+
 // Fonction pour obtenir la classe CSS selon le statut
 function getStatusClass(status) {
   switch (status) {
@@ -139,6 +173,16 @@ function getStatusClass(status) {
     default:
       return "text-secondary";
   }
+}
+
+// Fonction pour vérifier si une réservation peut être modifiée/annulée (24h avant)
+function canModifyReservation(reservationDate, reservationTime) {
+  const now = new Date();
+  const reservationDateTime = new Date(`${reservationDate}T${reservationTime}`);
+  const timeDiff = reservationDateTime.getTime() - now.getTime();
+  const hoursUntilReservation = timeDiff / (1000 * 3600); // Convertir en heures
+
+  return hoursUntilReservation >= 24;
 }
 
 // Fonction pour générer le HTML d'une réservation
@@ -189,10 +233,15 @@ function generateReservationHTML(reservation, isAdmin = false) {
                         </div>
                     `
                         : `
-                        <button type="button" class="btn btn-sm btn-outline-secondary btn-view-reservation" 
-                                data-reservation-id="${reservation.id}">
-                            👁️ Détails
-                        </button>
+                        <div class="btn-group btn-group-sm" role="group">
+                            ${getClientActionButtons(reservation)}
+                            <button type="button" class="btn btn-outline-info btn-view-reservation" 
+                                    data-reservation-id="${
+                                      reservation.id
+                                    }" title="Détails">
+                                👁️
+                            </button>
+                        </div>
                     `
                     }
                 </div>
@@ -230,7 +279,8 @@ function displayReservations() {
   const userRole = getRole();
   const userEmail = getCurrentUserEmail();
   console.log("🔍 DEBUG - Rôle utilisateur:", userRole);
-  console.log("🔍 DEBUG - Email utilisateur:", userEmail);
+  // 🚨 SÉCURITÉ: Ne jamais logger l'email complet
+  console.log("🔍 DEBUG - Email utilisateur présent:", !!userEmail);
   console.log(
     "🔍 DEBUG - Total réservations disponibles:",
     reservationsData.length
@@ -285,7 +335,7 @@ function renderReservations() {
                         : "Vous n'avez pas encore de réservation."
                     }
                 </p>
-                <a href="/reserver" class="btn btn-primary" onclick="route()">
+                <a href="/reserver" class="btn btn-primary" onclick="route(event)">
                     ➕ Faire une réservation
                 </a>
             </div>
@@ -387,6 +437,44 @@ function attachReservationEventListeners(isAdmin) {
           this.getAttribute("data-reservation-id")
         );
         viewReservationDetails(reservationId);
+      });
+    });
+
+    // Gestionnaires pour modifier une réservation (clients)
+    const editClientButtons = document.querySelectorAll(
+      ".btn-edit-client-reservation"
+    );
+    editClientButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const reservationId = parseInt(
+          this.getAttribute("data-reservation-id")
+        );
+        editClientReservation(reservationId);
+      });
+    });
+
+    // Gestionnaires pour annuler une réservation (clients)
+    const cancelClientButtons = document.querySelectorAll(
+      ".btn-cancel-client-reservation"
+    );
+    cancelClientButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const reservationId = parseInt(
+          this.getAttribute("data-reservation-id")
+        );
+        cancelClientReservation(reservationId);
+      });
+    });
+
+    // Gestionnaires pour contacter le restaurant (après 24h)
+    const contactButtons = document.querySelectorAll(".btn-contact-restaurant");
+    contactButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const reservationId = parseInt(
+          this.getAttribute("data-reservation-id")
+        );
+        const action = this.getAttribute("data-action");
+        showContactRestaurantModal(reservationId, action);
       });
     });
   }
@@ -503,6 +591,160 @@ function exportReservations() {
   document.body.removeChild(link);
 
   alert(`${reservations.length} réservations exportées !`);
+}
+
+// Fonction pour modifier une réservation (clients)
+function editClientReservation(reservationId) {
+  const reservation = reservationsData.find((r) => r.id === reservationId);
+  if (!reservation) {
+    alert("Réservation non trouvée");
+    return;
+  }
+
+  // Rediriger vers le formulaire de réservation en mode édition
+  // Stocker les données de la réservation à modifier
+  sessionStorage.setItem("editingReservation", JSON.stringify(reservation));
+
+  // Rediriger vers la page de réservation
+  if (typeof window.navigateTo === "function") {
+    window.navigateTo("/reserver");
+  } else if (typeof navigateTo === "function") {
+    navigateTo("/reserver");
+  } else {
+    // Fallback
+    window.location.href = "/reserver";
+  }
+}
+
+// Fonction pour annuler une réservation (clients)
+function cancelClientReservation(reservationId) {
+  const reservation = reservationsData.find((r) => r.id === reservationId);
+  if (!reservation) {
+    alert("Réservation non trouvée");
+    return;
+  }
+
+  const formattedDate = formatDate(reservation.date);
+
+  const confirmCancel = confirm(
+    `⚠️ Annulation de réservation\n\n` +
+      `Êtes-vous sûr(e) de vouloir annuler votre réservation ?\n\n` +
+      `📅 Date: ${formattedDate}\n` +
+      `⏰ Heure: ${reservation.time}\n` +
+      `👥 ${reservation.guests} personne(s)\n\n` +
+      `Cette action est irréversible.`
+  );
+
+  if (confirmCancel) {
+    // Mettre à jour le statut de la réservation
+    reservation.status = "annulée";
+
+    alert(
+      `✅ Réservation annulée avec succès !\n\n` +
+        `Votre réservation du ${formattedDate} à ${reservation.time} a été annulée.\n\n` +
+        `Un email de confirmation vous sera envoyé sous peu.`
+    );
+
+    // Rafraîchir l'affichage
+    displayReservations();
+  }
+}
+
+// Fonction pour afficher la modal de contact du restaurant
+function showContactRestaurantModal(reservationId, action) {
+  const reservation = reservationsData.find((r) => r.id === reservationId);
+  if (!reservation) {
+    alert("Réservation non trouvée");
+    return;
+  }
+
+  const formattedDate = formatDate(reservation.date);
+  const actionText = action === "modify" ? "modifier" : "annuler";
+  const actionEmoji = action === "modify" ? "✏️" : "❌";
+
+  // Créer une modal Bootstrap
+  const modalHTML = `
+    <div class="modal fade" id="contactRestaurantModal" tabindex="-1" aria-labelledby="contactRestaurantModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="contactRestaurantModalLabel">
+              ${actionEmoji} ${
+    actionText.charAt(0).toUpperCase() + actionText.slice(1)
+  } votre réservation
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-warning" role="alert">
+              <h6><i class="fas fa-clock"></i> Délai de modification dépassé</h6>
+              <p class="mb-2">Il n'est plus possible de ${actionText} votre réservation en ligne car il reste moins de 24 heures avant la date prévue.</p>
+            </div>
+            
+            <div class="card">
+              <div class="card-body">
+                <h6 class="card-title">📋 Détails de votre réservation :</h6>
+                <ul class="list-unstyled mb-0">
+                  <li><strong>📅 Date :</strong> ${formattedDate}</li>
+                  <li><strong>⏰ Heure :</strong> ${reservation.time} (${
+    reservation.service
+  })</li>
+                  <li><strong>👥 Personnes :</strong> ${reservation.guests}</li>
+                  <li><strong>🚫 Allergies :</strong> ${
+                    reservation.allergies
+                  }</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <h6>📞 Pour ${actionText} cette réservation, veuillez contacter directement le restaurant :</h6>
+              <div class="d-grid gap-2">
+                <a href="tel:+33123456789" class="btn btn-success">
+                  <i class="fas fa-phone"></i> Appeler le restaurant
+                  <br><small>+33 1 23 45 67 89</small>
+                </a>
+                <a href="mailto:contact@quai-antique.fr?subject=Demande de ${actionText} de réservation - ${formattedDate}&body=Bonjour,%0A%0AJe souhaite ${actionText} ma réservation suivante :%0A- Date : ${formattedDate}%0A- Heure : ${
+    reservation.time
+  }%0A- Nombre de personnes : ${
+    reservation.guests
+  }%0A%0AMerci de me confirmer la prise en compte de cette demande.%0A%0ACordialement" 
+                   class="btn btn-primary">
+                  <i class="fas fa-envelope"></i> Envoyer un email
+                  <br><small>contact@quai-antique.fr</small>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Supprimer toute modal existante
+  const existingModal = document.getElementById("contactRestaurantModal");
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // Ajouter la modal au DOM
+  document.body.insertAdjacentHTML("beforeend", modalHTML);
+
+  // Afficher la modal
+  const modal = new bootstrap.Modal(
+    document.getElementById("contactRestaurantModal")
+  );
+  modal.show();
+
+  // Supprimer la modal du DOM quand elle est fermée
+  document
+    .getElementById("contactRestaurantModal")
+    .addEventListener("hidden.bs.modal", function () {
+      this.remove();
+    });
 }
 
 // Initialisation au chargement de la page

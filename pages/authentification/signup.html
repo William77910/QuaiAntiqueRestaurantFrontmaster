@@ -43,11 +43,13 @@
       <label for="PasswordInput" class="form-label">Mot de passe</label>
       <input type="password" class="form-control" id="PasswordInput" />
       <div class="invalid-feedback">
-        Le mot de passe n'est pas assez robuste : Au moins 8 carractères, au
-        moins 1 lettre majuscule, au moins il lettre minuscule et un carractère
-        spéciale.
+        <!--class gérée par bootstrap-->
+        Le mot de passe n'est pas assez robuste : Au moins 8 carractères
+        comprenant au moins 1 lettre majuscule, 1 lettre minuscule et un
+        carractère spéciale.
       </div>
       <div class="valid-feedback">Mot de passe valide.</div>
+      <!--class gérée par bootstrap-->
     </div>
     <div class="mb-3">
       <label for="ValidatePasswordInput" class="form-label"
@@ -70,7 +72,7 @@
   </form>
   <div class="text-center pt-3">
     <!--ajoute le bouton menu avec un padding top de 3-->
-    <a href="/signin" onclick="route()"
+    <a href="/signin" onclick="route(event)"
       >Vous avez déjà un compte ? Connectez-vous ici !</a
     >
   </div>

@@ -196,7 +196,7 @@ function savePhoto() {
   }
 
   // Simulation de la sauvegarde (à remplacer par un appel API)
-  if (currentPhotoData && currentPhotoData.id) {
+  if (currentPhotoData?.id) {
     // Mode modification
     console.log("Modification de la photo:", {
       id: currentPhotoData.id,
@@ -233,10 +233,10 @@ function savePhoto() {
 }
 
 function deletePhoto() {
-  if (!currentPhotoData || !currentPhotoData.id) return;
+  if (!currentPhotoData?.id) return;
 
   // Simulation de la suppression (à remplacer par un appel API)
-  console.log("Suppression de la photo:", currentPhotoData);
+  console.log("Suppression de la photo ID:", currentPhotoData.id);
 
   // Supprimer l'élément du DOM
   const photoElement = document
@@ -310,22 +310,21 @@ function addNewPhotoToGallery(title, imageFile) {
 
   const reader = new FileReader();
   reader.onload = function (e) {
+    const imageData = e.target?.result || "";
     newPhotoElement.innerHTML = `
             <div class="image-card text-white">
-                <img class="w-100 rounded" src="${e.target.result}" alt="${title}">
+                <img class="w-100 rounded" src="${imageData}" alt="${title}">
                 <p class="titre-image">${title}</p>
                 <div class="action-image-buttons" data-show="admin">
-                    <button type="button" class="btn btn-outline-light btn-edit" data-photo-id="${newPhotoId}" data-photo-title="${title}" data-photo-src="${e.target.result}">
+                    <button type="button" class="btn btn-outline-light btn-edit" data-photo-id="${newPhotoId}" data-photo-title="${title}" data-photo-src="${imageData}">
                         ✏️ Modifier</button>
-                    <button type="button" class="btn btn-outline-light btn-delete" data-photo-id="${newPhotoId}" data-photo-title="${title}" data-photo-src="${e.target.result}">
+                    <button type="button" class="btn btn-outline-light btn-delete" data-photo-id="${newPhotoId}" data-photo-title="${title}" data-photo-src="${imageData}">
                         🗑️ Supprimer</button>
                 </div>
             </div>
         `;
 
-    // Insérer avant le bouton "Réserver"
-    const reserveButton =
-      galleryContainer.parentNode.querySelector(".text-center a");
+    // Insérer la nouvelle photo dans la galerie
     galleryContainer.appendChild(newPhotoElement);
 
     // Attacher les événements uniquement aux nouveaux boutons

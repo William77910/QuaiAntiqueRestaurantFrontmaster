@@ -7,15 +7,15 @@
 <div class="container content-with-footer-space dynamic-content">
   <!-- Bouton pour réserver -->
   <div class="text-center pb-3">
-    <a href="/reserver" class="btn btn-primary" onclick="route()"
+    <a href="/reserver" class="btn btn-primary" onclick="route(event)"
       >➕ Réserver une table</a
     >
   </div>
   <!-- Zone de chargement -->
   <div id="loading-reservations" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
+    <output class="spinner-border text-primary">
       <span class="visually-hidden">Chargement...</span>
-    </div>
+    </output>
     <p class="mt-2 text-muted">Chargement de vos réservations...</p>
   </div>
 

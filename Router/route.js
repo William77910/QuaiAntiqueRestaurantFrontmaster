@@ -6,6 +6,12 @@ export default class Route {
     this.pathJS = pathJS;
     this.authorize = authorize;
   }
+
+  // Méthode pour vérifier si un rôle est autorisé à accéder à cette route
+  isAuthorized(userRole) {
+    if (this.authorize.length === 0) return true; // Accessible à tous
+    return this.authorize.includes(userRole);
+  }
 }
 
 /*

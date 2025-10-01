@@ -114,8 +114,14 @@ function inscrireUtilisateur(event) {
     password: inputPassword.value,
   };
 
-  // Simuler l'inscription (à remplacer par un appel API réel)
-  console.log("Données d'inscription:", dataForm);
+  // 🚨 SÉCURITÉ: Ne jamais logger les mots de passe ou données sensibles
+  console.log(
+    "Inscription - Email:",
+    dataForm.email,
+    "| Nom:",
+    dataForm.lname,
+    dataForm.fname
+  );
 
   // Afficher un message de succès
   alert(

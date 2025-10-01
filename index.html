@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="scss/main.css" />
 
     <title>Le Quai Antique</title>
+    
+    <!-- 🛡️ Système de logging sécurisé -->
+    <script src="js/logger.js"></script>
   </head>
   <body>
     <header>
@@ -24,7 +27,7 @@
         navbar-expend-lg indique que le menu burger change à la taille lg,
          changement du theme dark en bg-dark et import du theme avec "data-bs-theme"-->
         <div class="container-fluid">
-          <a class="navbar-brand" href="/" onclick="route()">Quai Antique</a>
+          <a class="navbar-brand" href="/" onclick="route(event)">Quai Antique</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -39,23 +42,23 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="/" onclick="route()">Accueil</a>
+                <a class="nav-link" href="/" onclick="route(event)">Accueil</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/galerie" onclick="route()"
+                <a class="nav-link" href="/galerie" onclick="route(event)"
                   >Galerie</a
                 >
               </li>
 
               <li class="nav-item">
-                <a class="nav-link" href="/carte" onclick="route()">La carte</a>
+                <a class="nav-link" href="/carte" onclick="route(event)">La carte</a>
               </li>
               <li class="nav-item">
                 <a
                   class="nav-link"
                   href="/allResa"
                   data-show="connected"
-                  onclick="route()"
+                  onclick="route(event)"
                   >Les réservations</a
                 ><!-- accessible si l'utilisateur est connecté-->
               </li>
@@ -64,12 +67,12 @@
                   class="nav-link"
                   href="/account"
                   data-show="connected"
-                  onclick="route()"
+                  onclick="route(event)"
                   >Mon compte</a
                 >
               </li>
               <li class="nav-item" data-show="disconnected">
-                <a class="nav-link" href="/signin" onclick="route()"
+                <a class="nav-link" href="/signin" onclick="route(event)"
                   >Connexion</a
                 ><!-- accessible si l'utilisateur n'est pas connecté -->
               </li>
@@ -123,7 +126,7 @@
       <div class="row mt-4 pt-3 border-top border-secondary">
         <div class="col-12 text-center">
           <p class="mb-1">
-            <a href="/mentions-legales" onclick="route()" class="text-white-50 text-decoration-none">
+            <a href="/mentions-legales" onclick="route(event)" class="text-white-50 text-decoration-none">
               📋 Mentions légales
             </a>
           </p>
