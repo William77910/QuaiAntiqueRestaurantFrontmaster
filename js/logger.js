@@ -1,7 +1,7 @@
 // Système de logging sécurisé
 // En production, mettre DEBUG_MODE à false
 
-const DEBUG_MODE = true; // ⚠️ Mettre à false en production !
+const DEBUG_MODE = false; // ✅ Sécurisé pour la production !
 
 // Fonction de logging sécurisée
 window.secureLog = {
@@ -53,6 +53,8 @@ if (
   window.location.hostname !== "127.0.0.1"
 ) {
   // Probablement en production, désactiver les logs de debug
-  // Niveau de debug pour le développement
   disableLogging();
 }
+
+// Appel immédiat pour désactiver selon DEBUG_MODE
+disableLogging();

@@ -1,5 +1,3 @@
-console.log("🔑 Script signin.js chargé");
-
 // Attendre que le DOM soit prêt avant d'accéder aux éléments
 let mailInput, passwordInput, btnSignin;
 
@@ -9,16 +7,8 @@ function initializeSigninElements() {
   passwordInput = document.getElementById("PasswordInput"); // Récupérer l'input password
   btnSignin = document.getElementById("btnSignin"); // Récupérer le bouton de connexion
 
-  console.log("🔍 Éléments signin trouvés:");
-  console.log("- Email input:", !!mailInput);
-  console.log("- Password input:", !!passwordInput);
-  console.log("- Signin button:", !!btnSignin);
-
   if (btnSignin) {
     btnSignin.addEventListener("click", checkCredentials); // Ajouter un écouteur d'événement au bouton de connexion
-    console.log("✅ Event listener ajouté au bouton signin");
-  } else {
-    console.error("❌ Bouton signin non trouvé !");
   }
 }
 
@@ -26,14 +16,6 @@ function initializeSigninElements() {
 setTimeout(initializeSigninElements, 100);
 setTimeout(initializeSigninElements, 500);
 setTimeout(initializeSigninElements, 1000);
-
-// Debug: vérifier si les éléments sont présents toutes les secondes
-setInterval(() => {
-  const btn = document.getElementById("btnSignin");
-  if (!btn) {
-    console.warn("⚠️ Bouton signin toujours introuvable");
-  }
-}, 2000);
 
 // Vérifier si l'utilisateur a été redirigé depuis une tentative de réservation
 document.addEventListener("DOMContentLoaded", function () {
@@ -61,12 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
 function checkCredentials(event) {
   if (event) event.preventDefault(); // Empêcher le comportement par défaut du formulaire
 
-  console.log("🔐 Tentative de connexion...");
-  // 🚨 SÉCURITÉ: Ne jamais logger l'email complet
-  console.log("📧 Email saisi - format valide:", mailInput.value.includes("@"));
-  // 🚨 SÉCURITÉ: Ne jamais logger les mots de passe
-  console.log("🔑 Champ mot de passe rempli:", !!passwordInput.value);
-
   // ici il faut appeler l'API pour vérifier les credentials en BDD
 
   // Utilisateurs de test avec leurs informations
@@ -90,41 +66,24 @@ function checkCredentials(event) {
   };
 
   const user = testUsers[mailInput.value];
-  // 🚨 SÉCURITÉ: Ne pas exposer toutes les données utilisateur
-  // 🚨 SÉCURITÉ: Ne jamais logger l'email complet
-  console.log("👤 Utilisateur trouvé - Email valide | Rôle:", user.role);
   if (user && passwordInput.value === user.password) {
     // Si les identifiants sont corrects
-    console.log("✅ Connexion réussie pour:", user.name, "| Rôle:", user.role);
     alert(`Bienvenue ${user.name} !`);
 
     // Stocker l'email de l'utilisateur pour le filtrage des réservations
     sessionStorage.setItem("currentUserEmail", mailInput.value);
-    // 🚨 SÉCURITÉ: Ne jamais logger l'email complet en production
-    console.log("💾 Email stocké dans sessionStorage");
 
     // Ici, vous pouvez stocker le token JWT dans le localStorage ou le sessionStorage
     // il faudra récupérer le vrai token
     const token = "mvorjavoja^vohjvôirvjn^rovn";
     setToken(token); // Appeler la fonction pour stocker le token
-    // 🚨 SÉCURITÉ: Ne jamais logger le token en production
-    console.log("🎫 Token d'authentification généré et stocké");
 
     // Définir le rôle selon l'utilisateur
     setCookie(RoleCookieName, user.role, 7); // 7 jours de validité
-    console.log("👥 Rôle défini:", user.role);
-
-    // Vérification immédiate des cookies
-    console.log("🔍 Vérification des cookies:");
-    // 🚨 SÉCURITÉ: Ne jamais logger le token en production
-    console.log("- Token présent:", !!getToken());
-    console.log("- Rôle récupéré:", getRole());
-    console.log("- Utilisateur connecté?", isConnected());
 
     // Vérifier s'il y a une page de destination spécifique après connexion
     const redirectTo = sessionStorage.getItem("redirectAfterLogin") || "/";
     sessionStorage.removeItem("redirectAfterLogin"); // Nettoyer le storage
-    console.log("🔄 Redirection vers:", redirectTo);
 
     // Redirection vers la page appropriée en utilisant le système de routage SPA
     if (typeof window.navigateTo === "function") {
@@ -134,16 +93,7 @@ function checkCredentials(event) {
       window.location.replace(redirectTo);
     }
   } else {
-    console.log("❌ Échec de connexion");
-    console.log("- Utilisateur trouvé?", !!user);
-    if (user) {
-      console.log(
-        "- Mot de passe correct?",
-        passwordInput.value === user.password
-      );
-      // 🚨 SÉCURITÉ: Ne jamais logger les mots de passe
-      console.log("- Vérification du mot de passe en cours...");
-    }
+    alert("Email ou mot de passe incorrect !");
     mailInput.classList.add("is-invalid"); // Ajouter la classe is-invalid à l'input email
     passwordInput.classList.add("is-invalid"); // Ajouter la classe is-invalid à l'input password
   }

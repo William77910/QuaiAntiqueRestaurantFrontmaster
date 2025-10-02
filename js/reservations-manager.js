@@ -85,18 +85,13 @@ function getFilteredReservations() {
   const userRole = getRole();
   const userEmail = getCurrentUserEmail();
 
-  console.log("🔍 getFilteredReservations - Rôle:", userRole);
-  // 🚨 SÉCURITÉ: Ne pas logger l'email complet
-  console.log("🔍 getFilteredReservations - Email présent:", !!userEmail);
-
   if (!userRole || !userEmail) {
-    console.log("❌ Rôle ou email manquant, retour tableau vide");
     return [];
   }
 
   if (userRole === "admin") {
     // L'administrateur voit toutes les réservations
-    console.log(
+    secureLog.debug(
       "✅ Mode admin - Retour de toutes les réservations:",
       reservationsData.length
     );
@@ -106,14 +101,14 @@ function getFilteredReservations() {
     const clientReservations = reservationsData.filter(
       (reservation) => reservation.userId === userEmail
     );
-    console.log(
+    secureLog.debug(
       "✅ Mode client - Réservations filtrées:",
       clientReservations.length
     );
     return clientReservations;
   }
 
-  console.log("❌ Rôle non reconnu, retour tableau vide");
+  secureLog.debug("❌ Rôle non reconnu, retour tableau vide");
   return [];
 }
 
@@ -265,7 +260,7 @@ function generateReservationHTML(reservation, isAdmin = false) {
 
 // Fonction pour afficher les réservations
 function displayReservations() {
-  console.log("🔄 Affichage des réservations...");
+  secureLog.debug("🔄 Affichage des réservations...");
 
   const reservationsContainer = document.querySelector(".allreservations");
   const loadingElement = document.getElementById("loading-reservations");
@@ -278,13 +273,6 @@ function displayReservations() {
   // 🔍 DEBUGGING : Vérifier les données utilisateur
   const userRole = getRole();
   const userEmail = getCurrentUserEmail();
-  console.log("🔍 DEBUG - Rôle utilisateur:", userRole);
-  // 🚨 SÉCURITÉ: Ne jamais logger l'email complet
-  console.log("🔍 DEBUG - Email utilisateur présent:", !!userEmail);
-  console.log(
-    "🔍 DEBUG - Total réservations disponibles:",
-    reservationsData.length
-  );
 
   // Afficher l'indicateur de chargement
   if (loadingElement) {
@@ -390,7 +378,7 @@ function renderReservations() {
   // Attacher les gestionnaires d'événements
   attachReservationEventListeners(isAdmin);
 
-  console.log(
+  secureLog.debug(
     `${filteredReservations.length} réservations affichées pour ${userRole}`
   );
 }
@@ -750,7 +738,7 @@ function showContactRestaurantModal(reservationId, action) {
 // Initialisation au chargement de la page
 // 🚀 INITIALISATION ROBUSTE
 function initializeReservationsPage() {
-  console.log("🔧 Tentative d'initialisation des réservations...");
+  secureLog.debug("🔧 Tentative d'initialisation des réservations...");
 
   // Vérifier si nous sommes sur la page des réservations
   const isReservationsPage =
@@ -759,12 +747,12 @@ function initializeReservationsPage() {
     document.querySelector(".allreservations");
 
   if (isReservationsPage) {
-    console.log(
+    secureLog.debug(
       "✅ Page réservations détectée, lancement de displayReservations"
     );
     displayReservations();
   } else {
-    console.log("❌ Pas sur la page réservations");
+    secureLog.debug("❌ Pas sur la page réservations");
   }
 }
 
@@ -776,7 +764,7 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initializeReservationsPage);
 } else {
   // DOM déjà chargé
-  console.log("🔄 DOM déjà chargé, initialisation immédiate");
+  secureLog.debug("🔄 DOM déjà chargé, initialisation immédiate");
   setTimeout(initializeReservationsPage, 100);
 }
 

@@ -114,15 +114,6 @@ function inscrireUtilisateur(event) {
     password: inputPassword.value,
   };
 
-  // 🚨 SÉCURITÉ: Ne jamais logger les mots de passe ou données sensibles
-  console.log(
-    "Inscription - Email:",
-    dataForm.email,
-    "| Nom:",
-    dataForm.lname,
-    dataForm.fname
-  );
-
   // Afficher un message de succès
   alert(
     "Inscription réussie ! Vous allez être redirigé vers la page d'accueil."

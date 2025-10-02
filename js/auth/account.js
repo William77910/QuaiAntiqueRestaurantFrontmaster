@@ -1,5 +1,5 @@
 // Gestion de la page Mon compte
-console.log("🏠 Script account.js chargé");
+secureLog.debug("🏠 Script account.js chargé");
 
 // Variable pour éviter la double initialisation
 let accountPageInitialized = false;
@@ -14,11 +14,11 @@ window.initializeAccountPage = initializeAccountPage;
 
 function initializeAccountPage() {
   if (accountPageInitialized) {
-    console.log("⚠️ Page account déjà initialisée, abandon");
+    secureLog.debug("⚠️ Page account déjà initialisée, abandon");
     return;
   }
 
-  console.log("🔧 Initialisation de la page account");
+  secureLog.debug("🔧 Initialisation de la page account");
 
   // Attendre un peu plus que le contenu soit complètement chargé
   setTimeout(() => {
@@ -26,25 +26,25 @@ function initializeAccountPage() {
     const modifyButton = document.getElementById("modifyInfoBtn");
     const deleteButton = document.getElementById("deleteAccountBtn");
 
-    console.log("🔍 Recherche des éléments:");
-    console.log("- Form trouvé:", !!form);
-    console.log("- Bouton modifier trouvé:", !!modifyButton);
-    console.log("- Bouton supprimer trouvé:", !!deleteButton);
+    secureLog.debug("🔍 Recherche des éléments:");
+    secureLog.debug("- Form trouvé:", !!form);
+    secureLog.debug("- Bouton modifier trouvé:", !!modifyButton);
+    secureLog.debug("- Bouton supprimer trouvé:", !!deleteButton);
 
     if (form) {
       // Empêcher la soumission par défaut du formulaire
       form.addEventListener("submit", function (e) {
         e.preventDefault();
-        console.log("📝 Soumission du formulaire interceptée");
+        secureLog.debug("📝 Soumission du formulaire interceptée");
       });
     }
 
     // Ajouter les gestionnaires d'événements pour les boutons
     if (modifyButton) {
-      console.log("✅ Bouton modifier trouvé, ajout du listener");
+      secureLog.debug("✅ Bouton modifier trouvé, ajout du listener");
       modifyButton.addEventListener("click", function (e) {
         e.preventDefault();
-        console.log("🔄 Clic sur modifier informations");
+        secureLog.debug("🔄 Clic sur modifier informations");
         showModifyConfirmationModal();
       });
     } else {
@@ -52,10 +52,10 @@ function initializeAccountPage() {
     }
 
     if (deleteButton) {
-      console.log("✅ Bouton supprimer trouvé, ajout du listener");
+      secureLog.debug("✅ Bouton supprimer trouvé, ajout du listener");
       deleteButton.addEventListener("click", function (e) {
         e.preventDefault();
-        console.log("🗑️ Clic sur supprimer compte");
+        secureLog.debug("🗑️ Clic sur supprimer compte");
         showDeleteConfirmationModal();
       });
     } else {
@@ -69,7 +69,7 @@ function initializeAccountPage() {
     createConfirmationModals();
 
     accountPageInitialized = true;
-    console.log("✅ Page account initialisée avec succès");
+    secureLog.debug("✅ Page account initialisée avec succès");
   }, 200);
 }
 
@@ -79,7 +79,7 @@ function loadUserInformation() {
 
   if (userEmail) {
     // 🚨 SÉCURITÉ: Ne jamais logger l'email complet
-    console.log("📧 Chargement des informations utilisateur...");
+    secureLog.debug("📧 Chargement des informations utilisateur...");
 
     // Simuler le chargement des données utilisateur
     // Dans une vraie app, ceci serait un appel API
@@ -216,7 +216,7 @@ function setupModalEventListeners() {
   const confirmModifyBtn = document.getElementById("confirmModifyBtn");
   if (confirmModifyBtn) {
     confirmModifyBtn.addEventListener("click", function () {
-      console.log("✅ Clic sur confirmer modifications");
+      secureLog.debug("✅ Clic sur confirmer modifications");
 
       try {
         handleModifyInformation();
@@ -246,7 +246,7 @@ function setupModalEventListeners() {
 
   if (confirmDeleteBtn) {
     confirmDeleteBtn.addEventListener("click", function () {
-      console.log("🗑️ Clic sur confirmer suppression");
+      secureLog.debug("🗑️ Clic sur confirmer suppression");
 
       try {
         handleDeleteAccount();
@@ -282,7 +282,7 @@ function setupCancelButtonsListeners() {
         const modal = this.closest(".modal");
         if (modal) {
           const modalId = modal.id;
-          console.log("🚫 Clic sur annuler/fermer pour modal:", modalId);
+          secureLog.debug("🚫 Clic sur annuler/fermer pour modal:", modalId);
           closeModal(modalId);
         }
       });
@@ -291,7 +291,7 @@ function setupCancelButtonsListeners() {
       button.removeAttribute("data-bs-dismiss");
     });
 
-    console.log(
+    secureLog.debug(
       "✅ Gestionnaires d'annulation configurés pour",
       dismissButtons.length,
       "boutons"
@@ -302,11 +302,11 @@ function setupCancelButtonsListeners() {
 // Fonction simplifiée pour ouvrir les modales (évite Bootstrap qui peut figer)
 function showModal(modalId) {
   try {
-    console.log("🔄 Ouverture du modal:", modalId);
+    secureLog.debug("🔄 Ouverture du modal:", modalId);
 
     const modalElement = document.getElementById(modalId);
     if (!modalElement) {
-      console.log("❌ Modal non trouvé:", modalId);
+      secureLog.debug("❌ Modal non trouvé:", modalId);
       return;
     }
 
@@ -336,7 +336,7 @@ function showModal(modalId) {
     };
     document.addEventListener("keydown", escHandler);
 
-    console.log("✅ Modal ouvert:", modalId);
+    secureLog.debug("✅ Modal ouvert:", modalId);
   } catch (error) {
     console.error("❌ Erreur lors de l'ouverture du modal:", error);
   }
@@ -345,11 +345,11 @@ function showModal(modalId) {
 // Fonction simplifiée pour fermer les modales (évite Bootstrap qui peut figer)
 function closeModal(modalId) {
   try {
-    console.log("🔄 Fermeture du modal:", modalId);
+    secureLog.debug("🔄 Fermeture du modal:", modalId);
 
     const modalElement = document.getElementById(modalId);
     if (!modalElement) {
-      console.log("❌ Modal non trouvé:", modalId);
+      secureLog.debug("❌ Modal non trouvé:", modalId);
       return;
     }
 
@@ -369,7 +369,7 @@ function closeModal(modalId) {
     document.body.style.overflow = "";
     document.body.style.paddingRight = "";
 
-    console.log("✅ Modal fermé:", modalId);
+    secureLog.debug("✅ Modal fermé:", modalId);
   } catch (error) {
     console.error("❌ Erreur lors de la fermeture du modal:", error);
   }
@@ -432,7 +432,7 @@ function showDeleteConfirmationModal() {
 }
 
 function handleModifyInformation() {
-  console.log("💾 Début de la sauvegarde des informations");
+  secureLog.debug("💾 Début de la sauvegarde des informations");
 
   try {
     // Récupérer les valeurs du formulaire
@@ -441,7 +441,7 @@ function handleModifyInformation() {
     const allergies = document.getElementById("AllergieInput")?.value;
     const nbConvives = document.getElementById("NbConvivesInput")?.value;
 
-    console.log("📝 Données récupérées:", {
+    secureLog.debug("📝 Données récupérées:", {
       nom,
       prenom,
       allergies,
@@ -458,7 +458,7 @@ function handleModifyInformation() {
     // Mettre à jour les données en local (simulation)
     updateUserData(nom, prenom, allergies, nbConvives);
 
-    console.log("✅ Sauvegarde terminée avec succès");
+    secureLog.debug("✅ Sauvegarde terminée avec succès");
   } catch (error) {
     console.error("❌ Erreur lors de la sauvegarde:", error);
     showAlert(
@@ -471,7 +471,7 @@ function handleModifyInformation() {
 
 function handleDeleteAccount() {
   // La confirmation se fait maintenant via la modale
-  console.log("�️ Processus de suppression confirmé via modale");
+  secureLog.debug("�️ Processus de suppression confirmé via modale");
 
   // Procéder à la suppression
   deleteUserAccount();
@@ -479,7 +479,7 @@ function handleDeleteAccount() {
 
 function deleteUserAccount() {
   // 🚨 SÉCURITÉ: Ne jamais logger l'email complet
-  console.log("🗑️ Suppression du compte en cours...");
+  secureLog.debug("🗑️ Suppression du compte en cours...");
 
   // Afficher un message de traitement
   showAlert(
@@ -558,12 +558,6 @@ function showFinalDeleteConfirmation() {
 function updateUserData(nom, prenom, allergies, nbConvives) {
   // Simuler la mise à jour des données utilisateur
   const userEmail = sessionStorage.getItem("currentUserEmail");
-  console.log(`📝 Mise à jour des données pour ${userEmail}:`, {
-    nom,
-    prenom,
-    allergies,
-    nbConvives,
-  });
 
   // Dans une vraie application, ceci serait sauvegardé en base de données
 }
@@ -578,7 +572,7 @@ function clearUserData() {
     "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-  console.log("🧹 Données utilisateur nettoyées");
+  secureLog.debug("🧹 Données utilisateur nettoyées");
 }
 
 function showAlert(title, message, type = "info") {
@@ -623,27 +617,27 @@ function signout() {
     showAndHideElementsForRoles();
   }
 
-  console.log("👋 Utilisateur déconnecté depuis la page account");
+  secureLog.debug("👋 Utilisateur déconnecté depuis la page account");
 }
 
-console.log("✅ Script account.js initialisé avec succès");
+secureLog.debug("✅ Script account.js initialisé avec succès");
 
 // Fonction de test pour déboguer les boutons
 window.testAccountButtons = function () {
-  console.log("🧪 Test des boutons account:");
+  secureLog.debug("🧪 Test des boutons account:");
   const modifyBtn = document.getElementById("modifyInfoBtn");
   const deleteBtn = document.getElementById("deleteAccountBtn");
 
-  console.log("- Bouton modifier:", !!modifyBtn);
-  console.log("- Bouton supprimer:", !!deleteBtn);
+  secureLog.debug("- Bouton modifier:", !!modifyBtn);
+  secureLog.debug("- Bouton supprimer:", !!deleteBtn);
 
   if (modifyBtn) {
-    console.log("🔄 Test clic bouton modifier");
+    secureLog.debug("🔄 Test clic bouton modifier");
     modifyBtn.click();
   }
 
   if (deleteBtn) {
-    console.log("🗑️ Test clic bouton supprimer");
+    secureLog.debug("🗑️ Test clic bouton supprimer");
     deleteBtn.click();
   }
 };
@@ -656,7 +650,7 @@ window.reinitializeAccountPage = function () {
 
 // Fonctions globales pour les onclick des boutons (solution de secours)
 window.handleModifyClick = function () {
-  console.log("🔄 Clic sur modifier (onclick)");
+  secureLog.debug("🔄 Clic sur modifier (onclick)");
 
   // S'assurer que les modales sont créées
   if (!document.getElementById("modifyConfirmationModal")) {
@@ -667,7 +661,7 @@ window.handleModifyClick = function () {
 };
 
 window.handleDeleteClick = function () {
-  console.log("🗑️ Clic sur supprimer (onclick)");
+  secureLog.debug("🗑️ Clic sur supprimer (onclick)");
 
   // S'assurer que les modales sont créées
   if (!document.getElementById("deleteConfirmationModal")) {

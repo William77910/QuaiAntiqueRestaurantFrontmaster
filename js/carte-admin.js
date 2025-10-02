@@ -1,15 +1,15 @@
 // Gestion administrative de la carte du restaurant
-console.log("🍽️ Script carte-admin.js chargé");
+secureLog.debug("🍽️ Script carte-admin.js chargé");
 
 let sectionCounter = 4; // Compteur pour les nouveaux IDs (on a déjà 3 sections)
 
 // Initialisation des fonctionnalités d'administration
 function initCarteAdminCore() {
-  console.log("🔧 Initialisation de la gestion administrative de la carte...");
+  secureLog.debug("🔧 Initialisation de la gestion administrative de la carte...");
 
   // Éviter les doublons d'initialisation
   if (window.carteAdminInitialized) {
-    console.log("⚠️ Carte admin déjà initialisée, ignoré");
+    secureLog.debug("⚠️ Carte admin déjà initialisée, ignoré");
     return;
   }
   window.carteAdminInitialized = true;
@@ -18,7 +18,7 @@ function initCarteAdminCore() {
   const btnAddSections = document.querySelectorAll(
     "#btn-add-section, #addSectionBtn, .btn-add-section"
   );
-  console.log("➕ Boutons ajouter section trouvés:", btnAddSections.length);
+  secureLog.debug("➕ Boutons ajouter section trouvés:", btnAddSections.length);
 
   btnAddSections.forEach((btnAddSection) => {
     if (
@@ -27,7 +27,7 @@ function initCarteAdminCore() {
     ) {
       btnAddSection.setAttribute("data-listener-attached", "true");
       btnAddSection.addEventListener("click", openAddSectionModal);
-      console.log(
+      secureLog.debug(
         "✅ Event listener attaché au bouton:",
         btnAddSection.id || btnAddSection.className
       );
@@ -36,7 +36,7 @@ function initCarteAdminCore() {
 
   // Gestionnaires d'événements pour les boutons de modification
   const editButtons = document.querySelectorAll(".btn-edit-section");
-  console.log("✏️ Boutons modifier section trouvés:", editButtons.length);
+  secureLog.debug("✏️ Boutons modifier section trouvés:", editButtons.length);
 
   editButtons.forEach((button) => {
     // Vérifier si l'event listener n'est pas déjà attaché
@@ -44,7 +44,7 @@ function initCarteAdminCore() {
       button.setAttribute("data-listener-attached", "true");
       button.addEventListener("click", function (e) {
         e.preventDefault();
-        console.log("✏️ Clic sur bouton modifier section");
+        secureLog.debug("✏️ Clic sur bouton modifier section");
 
         const sectionId = this.getAttribute("data-section-id");
         const sectionTitle = this.getAttribute("data-section-title");
@@ -53,7 +53,7 @@ function initCarteAdminCore() {
         );
         const sectionImage = this.getAttribute("data-section-image");
 
-        console.log("📊 Données section:", { sectionId, sectionTitle });
+        secureLog.debug("📊 Données section:", { sectionId, sectionTitle });
         openEditSectionModal(
           sectionId,
           sectionTitle,
@@ -66,7 +66,7 @@ function initCarteAdminCore() {
 
   // Gestionnaires d'événements pour les boutons de suppression
   const deleteButtons = document.querySelectorAll(".btn-delete-section");
-  console.log("🗑️ Boutons supprimer section trouvés:", deleteButtons.length);
+  secureLog.debug("🗑️ Boutons supprimer section trouvés:", deleteButtons.length);
 
   deleteButtons.forEach((button) => {
     // Vérifier si l'event listener n'est pas déjà attaché
@@ -74,12 +74,12 @@ function initCarteAdminCore() {
       button.setAttribute("data-listener-attached", "true");
       button.addEventListener("click", function (e) {
         e.preventDefault();
-        console.log("🗑️ Clic sur bouton supprimer section");
+        secureLog.debug("🗑️ Clic sur bouton supprimer section");
 
         const sectionId = this.getAttribute("data-section-id");
         const sectionTitle = this.getAttribute("data-section-title");
 
-        console.log("📊 Section à supprimer:", { sectionId, sectionTitle });
+        secureLog.debug("📊 Section à supprimer:", { sectionId, sectionTitle });
         openDeleteSectionModal(sectionId, sectionTitle);
       });
     }
@@ -115,7 +115,7 @@ function initCarteAdminCore() {
 
 // Ouvrir la modal d'ajout de section
 function openAddSectionModal() {
-  console.log("Ouverture de la modal d'ajout de section");
+  secureLog.debug("Ouverture de la modal d'ajout de section");
 
   // Réinitialiser le formulaire
   document.getElementById("sectionForm").reset();
@@ -131,7 +131,7 @@ function openAddSectionModal() {
   document.getElementById("sectionImageLeft").checked = false;
 
   // Ouvrir la modal
-  console.log("🔓 Ouverture de la modale d'ajout de section");
+  secureLog.debug("🔓 Ouverture de la modale d'ajout de section");
   const modalElement = document.getElementById("sectionModal");
 
   // Réutiliser l'instance existante ou en créer une nouvelle
@@ -141,12 +141,12 @@ function openAddSectionModal() {
   }
 
   modal.show();
-  console.log("✅ Modale d'ajout affichée");
+  secureLog.debug("✅ Modale d'ajout affichée");
 }
 
 // Ouvrir la modal de modification de section
 function openEditSectionModal(sectionId, title, description, imageSrc) {
-  console.log(
+  secureLog.debug(
     "Ouverture de la modal de modification pour la section:",
     sectionId
   );
@@ -207,7 +207,7 @@ function openEditSectionModal(sectionId, title, description, imageSrc) {
     "Modifier la section";
 
   // Ouvrir la modal
-  console.log("🔓 Ouverture de la modale de modification de section");
+  secureLog.debug("🔓 Ouverture de la modale de modification de section");
   const modalElement = document.getElementById("sectionModal");
 
   // Réutiliser l'instance existante ou en créer une nouvelle
@@ -217,12 +217,12 @@ function openEditSectionModal(sectionId, title, description, imageSrc) {
   }
 
   modal.show();
-  console.log("✅ Modale de modification affichée");
+  secureLog.debug("✅ Modale de modification affichée");
 }
 
 // Ouvrir la modal de suppression de section
 function openDeleteSectionModal(sectionId, title) {
-  console.log(
+  secureLog.debug(
     "Ouverture de la modal de suppression pour la section:",
     sectionId
   );
@@ -232,7 +232,7 @@ function openDeleteSectionModal(sectionId, title) {
     .getElementById("confirmDeleteSectionBtn")
     .setAttribute("data-section-id", sectionId);
 
-  console.log("🔓 Ouverture de la modale de suppression de section");
+  secureLog.debug("🔓 Ouverture de la modale de suppression de section");
   const modalElement = document.getElementById("deleteSectionModal");
 
   // Réutiliser l'instance existante ou en créer une nouvelle
@@ -242,7 +242,7 @@ function openDeleteSectionModal(sectionId, title) {
   }
 
   modal.show();
-  console.log("✅ Modale de suppression affichée");
+  secureLog.debug("✅ Modale de suppression affichée");
 }
 
 // Aperçu de l'image sélectionnée
@@ -264,7 +264,7 @@ function previewSectionImage() {
 
 // Sauvegarder une section (ajout ou modification)
 function saveSection() {
-  console.log("Sauvegarde de la section...");
+  secureLog.debug("Sauvegarde de la section...");
 
   const sectionId = document.getElementById("sectionId").value;
   const title = document.getElementById("sectionTitle").value.trim();
@@ -306,15 +306,15 @@ function saveSection() {
   }
 
   // Fermer la modal
-  console.log("🔒 Fermeture de la modale de section");
+  secureLog.debug("🔒 Fermeture de la modale de section");
   const modal = bootstrap.Modal.getInstance(
     document.getElementById("sectionModal")
   );
   if (modal) {
     modal.hide();
-    console.log("✅ Modale de section fermée");
+    secureLog.debug("✅ Modale de section fermée");
   } else {
-    console.log("⚠️ Instance de modale de section non trouvée");
+    secureLog.debug("⚠️ Instance de modale de section non trouvée");
   }
 }
 
@@ -327,7 +327,7 @@ function addNewSection(
   imageLeft,
   imageFile
 ) {
-  console.log("Ajout d'une nouvelle section:", title);
+  secureLog.debug("Ajout d'une nouvelle section:", title);
 
   const newSectionId = sectionCounter++;
   let imageSrc = "../images/food.jpg"; // Image par défaut
@@ -461,7 +461,7 @@ function updateSection(
   imageLeft,
   imageFile
 ) {
-  console.log("Mise à jour de la section:", sectionId);
+  secureLog.debug("Mise à jour de la section:", sectionId);
 
   const sectionElement = document.querySelector(
     `[data-section-id="${sectionId}"]`
@@ -601,7 +601,7 @@ function attachSectionEventListeners(sectionId) {
 // Confirmer la suppression d'une section
 function confirmDeleteSection() {
   const sectionId = this.getAttribute("data-section-id");
-  console.log("Suppression de la section:", sectionId);
+  secureLog.debug("Suppression de la section:", sectionId);
 
   const sectionElement = document.querySelector(
     `[data-section-id="${sectionId}"]`
@@ -614,21 +614,21 @@ function confirmDeleteSection() {
   }
 
   // Fermer la modal
-  console.log("🔒 Fermeture de la modale de suppression");
+  secureLog.debug("🔒 Fermeture de la modale de suppression");
   const modal = bootstrap.Modal.getInstance(
     document.getElementById("deleteSectionModal")
   );
   if (modal) {
     modal.hide();
-    console.log("✅ Modale de suppression fermée");
+    secureLog.debug("✅ Modale de suppression fermée");
   } else {
-    console.log("⚠️ Instance de modale de suppression non trouvée");
+    secureLog.debug("⚠️ Instance de modale de suppression non trouvée");
   }
 }
 
 // Initialiser lors du chargement de la page
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("🔧 DOM chargé pour carte-admin");
+  secureLog.debug("🔧 DOM chargé pour carte-admin");
   initCarteAdminPage();
 });
 
@@ -636,7 +636,7 @@ document.addEventListener("DOMContentLoaded", function () {
 window.initCarteAdmin = initCarteAdminPage;
 
 function initCarteAdminPage() {
-  console.log("🔧 initCarteAdminPage appelé");
+  secureLog.debug("🔧 initCarteAdminPage appelé");
 
   // Réinitialiser le flag pour permettre une nouvelle initialisation
   window.carteAdminInitialized = false;
@@ -657,10 +657,10 @@ function initCarteAdminPage() {
     document.querySelector(".menu-section");
 
   if (isCartePage) {
-    console.log("✅ Page carte détectée, initialisation...");
+    secureLog.debug("✅ Page carte détectée, initialisation...");
     initCarteAdminCore(); // ✅ CORRECTION: Appeler la vraie fonction d'initialisation
   } else {
-    console.log("❌ Pas sur la page carte");
+    secureLog.debug("❌ Pas sur la page carte");
   }
 }
 
@@ -671,6 +671,6 @@ window.initCarteAdmin = initCarteAdminPage;
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initCarteAdminPage);
 } else {
-  console.log("🔄 DOM déjà chargé pour carte, initialisation immédiate");
+  secureLog.debug("🔄 DOM déjà chargé pour carte, initialisation immédiate");
   setTimeout(initCarteAdminPage, 100);
 }

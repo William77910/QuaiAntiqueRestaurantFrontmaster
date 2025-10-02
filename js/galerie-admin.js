@@ -1,11 +1,11 @@
 // Script pour la gestion de la galerie par l'administrateur
-console.log("🖼️ Script galerie-admin.js chargé");
+secureLog.debug("🖼️ Script galerie-admin.js chargé");
 
 let currentPhotoData = null;
 
 // Initialisation des événements une fois le DOM chargé
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("🔧 Initialisation de la galerie admin");
+  secureLog.debug("🔧 Initialisation de la galerie admin");
   initGalleryAdminPage(); // ✅ CORRECTION: Appeler la fonction wrapper
 });
 
@@ -13,18 +13,18 @@ document.addEventListener("DOMContentLoaded", function () {
 window.initGalleryAdmin = initGalleryAdminPage; // ✅ CORRECTION: Pointer vers la bonne fonction
 
 function initGalleryAdminCore() {
-  console.log("🔄 initGalleryAdmin appelé");
+  secureLog.debug("🔄 initGalleryAdmin appelé");
 
   // Éviter les doublons d'initialisation
   if (window.galleryAdminInitialized) {
-    console.log("⚠️ Galerie admin déjà initialisée, ignoré");
+    secureLog.debug("⚠️ Galerie admin déjà initialisée, ignoré");
     return;
   }
   window.galleryAdminInitialized = true;
 
   // Gestion des boutons d'édition
   const editButtons = document.querySelectorAll(".btn-edit");
-  console.log("📝 Boutons modifier trouvés:", editButtons.length);
+  secureLog.debug("📝 Boutons modifier trouvés:", editButtons.length);
 
   editButtons.forEach((button) => {
     // Vérifier si l'event listener n'est pas déjà attaché
@@ -32,13 +32,13 @@ function initGalleryAdminCore() {
       button.setAttribute("data-listener-attached", "true");
       button.addEventListener("click", function (e) {
         e.preventDefault();
-        console.log("✏️ Clic sur bouton modifier");
+        secureLog.debug("✏️ Clic sur bouton modifier");
 
         const photoId = this.getAttribute("data-photo-id");
         const photoTitle = this.getAttribute("data-photo-title");
         const photoSrc = this.getAttribute("data-photo-src");
 
-        console.log("📊 Données photo:", { photoId, photoTitle, photoSrc });
+        secureLog.debug("📊 Données photo:", { photoId, photoTitle, photoSrc });
         openEditModal(photoId, photoTitle, photoSrc);
       });
     }
@@ -46,7 +46,7 @@ function initGalleryAdminCore() {
 
   // Gestion des boutons de suppression
   const deleteButtons = document.querySelectorAll(".btn-delete");
-  console.log("🗑️ Boutons supprimer trouvés:", deleteButtons.length);
+  secureLog.debug("🗑️ Boutons supprimer trouvés:", deleteButtons.length);
 
   deleteButtons.forEach((button) => {
     // Vérifier si l'event listener n'est pas déjà attaché
@@ -54,13 +54,13 @@ function initGalleryAdminCore() {
       button.setAttribute("data-listener-attached", "true");
       button.addEventListener("click", function (e) {
         e.preventDefault();
-        console.log("🗑️ Clic sur bouton supprimer");
+        secureLog.debug("🗑️ Clic sur bouton supprimer");
 
         const photoId = this.getAttribute("data-photo-id");
         const photoTitle = this.getAttribute("data-photo-title");
         const photoSrc = this.getAttribute("data-photo-src");
 
-        console.log("📊 Données photo à supprimer:", {
+        secureLog.debug("📊 Données photo à supprimer:", {
           photoId,
           photoTitle,
           photoSrc,
@@ -134,7 +134,7 @@ function openEditModal(photoId, photoTitle, photoSrc) {
   }
 
   // Ouvrir la modale
-  console.log("🔓 Ouverture de la modale d'édition");
+  secureLog.debug("🔓 Ouverture de la modale d'édition");
   const modalElement = document.getElementById("EditionPhotoModal");
 
   // Réutiliser l'instance existante ou en créer une nouvelle
@@ -144,7 +144,7 @@ function openEditModal(photoId, photoTitle, photoSrc) {
   }
 
   modal.show();
-  console.log("✅ Modale affichée");
+  secureLog.debug("✅ Modale affichée");
 }
 
 function openDeleteModal(photoId, photoTitle, photoSrc) {
@@ -198,7 +198,7 @@ function savePhoto() {
   // Simulation de la sauvegarde (à remplacer par un appel API)
   if (currentPhotoData?.id) {
     // Mode modification
-    console.log("Modification de la photo:", {
+    secureLog.debug("Modification de la photo:", {
       id: currentPhotoData.id,
       title: newTitle,
       file: newImageFile,
@@ -209,7 +209,7 @@ function savePhoto() {
     alert("Photo modifiée avec succès !");
   } else {
     // Mode ajout
-    console.log("Ajout d'une nouvelle photo:", {
+    secureLog.debug("Ajout d'une nouvelle photo:", {
       title: newTitle,
       file: newImageFile,
     });
@@ -220,15 +220,15 @@ function savePhoto() {
   }
 
   // Fermer la modale
-  console.log("🔒 Fermeture de la modale d'édition");
+  secureLog.debug("🔒 Fermeture de la modale d'édition");
   const modal = bootstrap.Modal.getInstance(
     document.getElementById("EditionPhotoModal")
   );
   if (modal) {
     modal.hide();
-    console.log("✅ Modale fermée");
+    secureLog.debug("✅ Modale fermée");
   } else {
-    console.log("⚠️ Instance de modale non trouvée");
+    secureLog.debug("⚠️ Instance de modale non trouvée");
   }
 }
 
@@ -236,7 +236,7 @@ function deletePhoto() {
   if (!currentPhotoData?.id) return;
 
   // Simulation de la suppression (à remplacer par un appel API)
-  console.log("Suppression de la photo ID:", currentPhotoData.id);
+  secureLog.debug("Suppression de la photo ID:", currentPhotoData.id);
 
   // Supprimer l'élément du DOM
   const photoElement = document
@@ -346,13 +346,13 @@ function attachEventListenersToNewPhoto(photoElement) {
   if (editButton) {
     editButton.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("✏️ Clic sur bouton modifier (nouveau)");
+      secureLog.debug("✏️ Clic sur bouton modifier (nouveau)");
 
       const photoId = this.getAttribute("data-photo-id");
       const photoTitle = this.getAttribute("data-photo-title");
       const photoSrc = this.getAttribute("data-photo-src");
 
-      console.log("📊 Données photo:", { photoId, photoTitle, photoSrc });
+      secureLog.debug("📊 Données photo:", { photoId, photoTitle, photoSrc });
       openEditModal(photoId, photoTitle, photoSrc);
     });
   }
@@ -360,13 +360,13 @@ function attachEventListenersToNewPhoto(photoElement) {
   if (deleteButton) {
     deleteButton.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("🗑️ Clic sur bouton supprimer (nouveau)");
+      secureLog.debug("🗑️ Clic sur bouton supprimer (nouveau)");
 
       const photoId = this.getAttribute("data-photo-id");
       const photoTitle = this.getAttribute("data-photo-title");
       const photoSrc = this.getAttribute("data-photo-src");
 
-      console.log("📊 Données photo:", { photoId, photoTitle, photoSrc });
+      secureLog.debug("📊 Données photo:", { photoId, photoTitle, photoSrc });
       openDeleteModal(photoId, photoTitle, photoSrc);
     });
   }
@@ -374,7 +374,7 @@ function attachEventListenersToNewPhoto(photoElement) {
 
 // 🚀 INITIALISATION ROBUSTE POUR LE ROUTER
 function initGalleryAdminPage() {
-  console.log("🔧 initGalleryAdminPage appelé");
+  secureLog.debug("🔧 initGalleryAdminPage appelé");
 
   // Réinitialiser le flag pour permettre une nouvelle initialisation
   window.galleryAdminInitialized = false;
@@ -395,10 +395,10 @@ function initGalleryAdminPage() {
     document.querySelector(".image-card");
 
   if (isGalleryPage) {
-    console.log("✅ Page galerie détectée, initialisation...");
+    secureLog.debug("✅ Page galerie détectée, initialisation...");
     initGalleryAdminCore(); // ✅ CORRECTION: Appeler la vraie fonction d'initialisation
   } else {
-    console.log("❌ Pas sur la page galerie");
+    secureLog.debug("❌ Pas sur la page galerie");
   }
 }
 
@@ -409,6 +409,6 @@ window.initGalleryAdmin = initGalleryAdminPage;
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initGalleryAdminPage);
 } else {
-  console.log("🔄 DOM déjà chargé pour galerie, initialisation immédiate");
+  secureLog.debug("🔄 DOM déjà chargé pour galerie, initialisation immédiate");
   setTimeout(initGalleryAdminPage, 100);
 }

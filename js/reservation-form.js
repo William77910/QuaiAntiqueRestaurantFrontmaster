@@ -706,7 +706,7 @@ function submitReservation(formData) {
       }
 
       // 🚨 SÉCURITÉ: Ne jamais logger les données complètes du formulaire
-      console.log("Réservation modifiée avec succès");
+      secureLog.debug("Réservation modifiée avec succès");
 
       alert(
         `✅ Réservation modifiée avec succès !\n\n` +
@@ -724,7 +724,7 @@ function submitReservation(formData) {
     } else {
       // Mode création (comportement original)
       // 🚨 SÉCURITÉ: Ne jamais logger les données complètes du formulaire
-      console.log("Réservation soumise avec succès");
+      secureLog.debug("Réservation soumise avec succès");
 
       alert(
         `✅ Réservation confirmée !\n\n` +
@@ -747,7 +747,7 @@ function submitReservation(formData) {
 
 // Fonction d'initialisation
 function initReservationForm() {
-  console.log("Initialisation du formulaire de réservation...");
+  secureLog.debug("Initialisation du formulaire de réservation...");
 
   // Vérifier si l'utilisateur est connecté
   if (!isConnected()) {
@@ -757,7 +757,7 @@ function initReservationForm() {
 
   // Vérifier si on est en mode édition
   if (isEditMode()) {
-    console.log("Mode édition détecté");
+    secureLog.debug("Mode édition détecté");
     prefillEditForm();
   } else {
     // Mode création normal
@@ -770,7 +770,7 @@ function initReservationForm() {
   validateGuests();
   setupFormSubmission();
 
-  console.log("Formulaire de réservation initialisé avec succès");
+  secureLog.debug("Formulaire de réservation initialisé avec succès");
 }
 
 // Initialisation au chargement de la page
